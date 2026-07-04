@@ -88,10 +88,16 @@ h4 {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(15, 23, 42, 0.9);
+    background: rgba(15, 23, 42, 0.95);
     backdrop-filter: blur(10px);
     z-index: 1000;
     border-bottom: 1px solid var(--glass-border);
+    transition: background 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+.navbar.scrolled {
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(15px);
 }
 
 .nav-content {
@@ -161,7 +167,7 @@ h4 {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0.12;
+    opacity: 0.35;
     z-index: 0;
 }
 
@@ -1179,11 +1185,15 @@ footer {
 
     .timeline-images {
         flex-direction: row;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .timeline-images img {
-        height: 80px;
+        height: 90px;
         flex: 1;
+        min-width: 0;
+        max-width: 100%;
     }
 
     /* Projects */
