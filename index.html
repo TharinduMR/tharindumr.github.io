@@ -7,6 +7,7 @@
     <title>Tharindu Madhusanka | Engineering Portfolio</title>
     <meta name="description" content="Portfolio of Tharindu Madhusanka Rajapakshe, Mechanical & Energy Engineer.">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="liquid-glass.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -16,18 +17,76 @@
 </head>
 
 <body>
-    <nav class="navbar">
-        <div class="nav-content">
-            <div class="logo">TMR.</div>
-            <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+    <a href="#home" class="brand-logo" aria-label="TMR Home">
+        <img src="logo.png" alt="TMR Logo" class="brand-logo__img">
+        <span class="brand-logo__text">TMR.</span>
+    </a>
+    <!-- Floating Dock Navigation -->
+    <div class="floating-dock">
+        <nav class="floating-dock__nav" aria-label="Main navigation">
+            <a href="#home" title="Home" class="dock-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"></path>
+                    <path d="M9 21V12h6v9"></path>
+                </svg>
+            </a>
+
+            <a href="#about" title="About" class="dock-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </a>
+
+            <a href="#experience" title="Experience" class="dock-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                    <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path>
+                </svg>
+            </a>
+
+            <a href="#projects" title="Projects" class="dock-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                </svg>
+            </a>
+
+            <span class="dock-divider" aria-hidden="true"></span>
+
+            <a href="#skills" title="Skills" class="dock-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+            </a>
+
+            <a href="#contact" title="Contact" class="dock-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+            </a>
+
+            <span class="dock-divider" aria-hidden="true"></span>
+
+            <a href="https://github.com/TharinduMR" target="_blank" rel="noopener noreferrer" title="GitHub"
+                class="dock-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z">
+                    </path>
+                </svg>
+            </a>
+        </nav>
+    </div>
 
     <header class="hero" id="home">
         <div class="hero-bg-image"></div>
@@ -39,8 +98,24 @@
                 energy systems. Driven to explore machine design, thermodynamics, mechatronics, fluid mechanics, and
                 advanced engineering challenges.</p>
             <div class="hero-buttons">
-                <a href="#projects" class="btn primary">View My Work</a>
-                <a href="#contact" class="btn secondary">Get in Touch</a>
+                <a href="#projects" class="glass glass-btn glass-btn--primary">View My Work</a>
+                <a href="#contact" class="glass glass-btn glass-btn--ghost">Get in Touch</a>
+            </div>
+            
+            <!-- Skills Carousel -->
+            <div class="hero-skills-carousel">
+                <div class="skills-track" id="skills-track">
+                    <div class="skill-bubble glass-badge glass-badge--aqua">Machine Design</div>
+                    <div class="skill-bubble glass-badge glass-badge--aqua">Thermodynamics</div>
+                    <div class="skill-bubble glass-badge glass-badge--aqua">Mechatronics</div>
+                    <div class="skill-bubble glass-badge glass-badge--aqua">Fluid Mechanics</div>
+                    <div class="skill-bubble glass-badge glass-badge--aqua">Web Development</div>
+                    <div class="skill-bubble glass-badge glass-badge--aqua">Python</div>
+                    <div class="skill-bubble glass-badge glass-badge--aqua">CAD/CAM</div>
+                    <div class="skill-bubble glass-badge glass-badge--aqua">Energy Systems</div>
+                    <div class="skill-bubble glass-badge glass-badge--aqua">Product Design</div>
+                    <div class="skill-bubble glass-badge glass-badge--aqua">Artificial Intelligence</div>
+                </div>
             </div>
         </div>
         <div class="hero-graphics fade-in-up delay-1">
@@ -215,13 +290,13 @@
                                 <h3>MEP Engineer</h3>
                                 <h4>Building Services Engineering Consultants (pvt) Ltd.</h4>
                                 <div class="exp-skills">
-                                    <span class="exp-tag">MEP System Design</span>
-                                    <span class="exp-tag">Power Distribution</span>
-                                    <span class="exp-tag">Motor Control</span>
-                                    <span class="exp-tag">Fire Protection</span>
-                                    <span class="exp-tag">Project Management</span>
-                                    <span class="exp-tag">AutoCAD</span>
-                                    <span class="exp-tag">Revit MEP</span>
+                                    <span class="glass-tag">MEP System Design</span>
+                                    <span class="glass-tag">Power Distribution</span>
+                                    <span class="glass-tag">Motor Control</span>
+                                    <span class="glass-tag">Fire Protection</span>
+                                    <span class="glass-tag">Project Management</span>
+                                    <span class="glass-tag">AutoCAD</span>
+                                    <span class="glass-tag">Revit MEP</span>
                                 </div>
                             </div>
                             <div class="timeline-images">
@@ -240,11 +315,11 @@
                                 <h3>Mechanical Engineering Trainee - Intern</h3>
                                 <h4>LTL Holdings, Sobadhanavi 350MW LNG Combined Cycle Power Plant</h4>
                                 <div class="exp-skills">
-                                    <span class="exp-tag">LNG Power Generation</span>
-                                    <span class="exp-tag">Commissioning</span>
-                                    <span class="exp-tag">Plant Efficiency</span>
-                                    <span class="exp-tag">Troubleshooting</span>
-                                    <span class="exp-tag">Operational Reports</span>
+                                    <span class="glass-tag">LNG Power Generation</span>
+                                    <span class="glass-tag">Commissioning</span>
+                                    <span class="glass-tag">Plant Efficiency</span>
+                                    <span class="glass-tag">Troubleshooting</span>
+                                    <span class="glass-tag">Operational Reports</span>
                                 </div>
                             </div>
                             <div class="timeline-images">
@@ -263,11 +338,11 @@
                                 <h3>Mechanical Engineering Trainee - Intern</h3>
                                 <h4>Mahaweli Authority, Victoria Dam</h4>
                                 <div class="exp-skills">
-                                    <span class="exp-tag">Hydroelectric Systems</span>
-                                    <span class="exp-tag">Hydraulic Circuits</span>
-                                    <span class="exp-tag">Dam Safety</span>
-                                    <span class="exp-tag">Field Inspections</span>
-                                    <span class="exp-tag">Maintenance</span>
+                                    <span class="glass-tag">Hydroelectric Systems</span>
+                                    <span class="glass-tag">Hydraulic Circuits</span>
+                                    <span class="glass-tag">Dam Safety</span>
+                                    <span class="glass-tag">Field Inspections</span>
+                                    <span class="glass-tag">Maintenance</span>
                                 </div>
                             </div>
                             <div class="timeline-images">
@@ -294,8 +369,8 @@
                     <p>Designed a vibration-based, dual-body (NACA 0012 & Cylinder) energy harvesting system for
                         low-speed wind environments. Achieved 87.5W peak power at 7.32% efficiency using PMLGs.</p>
                     <div class="tech-stack">
-                        <span>CFD</span><span>ANSYS</span><span>VIV &
-                            TIV</span><span>SolidWorks</span><span>Electromagnetics</span>
+                        <span class="glass-tag">CFD</span><span class="glass-tag">ANSYS</span><span class="glass-tag">VIV &
+                            TIV</span><span class="glass-tag">SolidWorks</span><span class="glass-tag">Electromagnetics</span>
                     </div>
                     <div class="project-mini-gallery">
                         <img src="wind1.png" alt="Preview 1">
@@ -316,7 +391,7 @@
                         efficiency for a 20-inch industrial separator. Analytically validated results across multiple
                         flow rates.</p>
                     <div class="tech-stack">
-                        <span>ANSYS Fluent</span><span>CFD</span><span>DPM</span><span>Multiphase flow</span>
+                        <span class="glass-tag">ANSYS Fluent</span><span class="glass-tag">CFD</span><span class="glass-tag">DPM</span><span class="glass-tag">Multiphase flow</span>
                     </div>
                     <div class="project-mini-gallery">
                         <img src="cfd1.png" alt="Velocity Contours">

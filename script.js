@@ -30,23 +30,36 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const targetElement = document.querySelector(targetId);
 
         if (targetElement) {
+            const scrollOffset = targetElement.offsetTop - 85;
             window.scrollTo({
-                top: targetElement.offsetTop - 80,
+                top: scrollOffset,
                 behavior: 'smooth'
             });
         }
     });
 });
 
-// Navbar transparency on scroll
-const navbar = document.querySelector('.navbar');
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
-    }
+// Highlight active section in floating dock
+const dockBtns = document.querySelectorAll('.dock-btn[href^="#"]');
+const sections = [];
+
+dockBtns.forEach(btn => {
+    const href = btn.getAttribute('href');
+    const section = document.querySelector(href);
+    if (section) sections.push({ btn, section });
 });
+
+const dockObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        const matchingItem = sections.find(s => s.section === entry.target);
+        if (matchingItem) {
+            if (entry.isIntersecting) {
+                dockBtns.forEach(b => b.classList.remove('active'));
+                matchingItem.btn.classList.add('active');
+            }
+        }
+    });
+}, { threshold: 0.3 });
 
 // Project Data
 const projectData = {
@@ -93,7 +106,7 @@ const projectData = {
         tech: "Utilized FEA methods for structural analysis and optimization of the suspension components.",
         outcomes: "Developed a comprehensive design package with detailed specifications and performance evaluations.",
         images: ["https://images.unsplash.com/photo-1556911259-8e7d5f0a0c0e?auto=format&fit=crop&q=80&w=800"],
-        pdf: ""
+        pdf: "double_dishbone.pdf"
     }
 };
 
@@ -210,4 +223,61 @@ function closeCertModal() {
     const certModal = document.getElementById("cert-modal");
     certModal.classList.remove("show");
     document.body.style.overflow = "auto";
+}
+
+// Start observing sections for dock highlighting
+sections.forEach(({ section }) => dockObserver.observe(section));
+
+// Skills Carousel Animation
+const track = document.getElementById('skills-track');
+if (track) {
+    // Clone items for infinite scroll
+    const items = Array.from(track.children);
+    items.forEach(item => {
+        const clone = item.cloneNode(true);
+        track.appendChild(clone);
+    });
+
+    let scrollPos = 0;
+    const speed = 1; // pixels per frame
+
+    function animateCarousel() {
+        scrollPos -= speed;
+        
+        // If we've scrolled half the width (the original items), reset to 0
+        if (Math.abs(scrollPos) >= track.scrollWidth / 2) {
+            scrollPos = 0;
+        }
+        
+        track.style.transform = `translateX(${scrollPos}px)`;
+
+        // Highlight center element
+        const carouselRect = track.parentElement.getBoundingClientRect();
+        const carouselCenter = carouselRect.left + carouselRect.width / 2;
+
+        const allBubbles = track.querySelectorAll('.skill-bubble');
+        let closestBubble = null;
+        let minDistance = Infinity;
+
+        allBubbles.forEach(bubble => {
+            const rect = bubble.getBoundingClientRect();
+            const bubbleCenter = rect.left + rect.width / 2;
+            const distance = Math.abs(carouselCenter - bubbleCenter);
+
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestBubble = bubble;
+            }
+            bubble.classList.remove('highlight');
+        });
+
+        if (closestBubble) {
+            closestBubble.classList.add('highlight');
+        }
+
+        requestAnimationFrame(animateCarousel);
+    }
+
+    // Start animation
+    animateCarousel();
 }
