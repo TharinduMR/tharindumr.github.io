@@ -129,7 +129,7 @@ function openModal(projectId) {
 
     if (data.pdf && data.pdf.trim() !== "") {
         const iframe = document.createElement("iframe");
-        iframe.src = data.pdf + "#toolbar=0&navpanes=0";
+        iframe.src = data.pdf + "#toolbar=0&navpanes=0&view=FitH";
         iframe.className = "modal-pdf-viewer";
         imageContainer.appendChild(iframe);
 
@@ -192,7 +192,7 @@ function openCertModal(src, title) {
 
         if (isPdf) {
             const iframe = document.createElement("iframe");
-            iframe.src = file + "#toolbar=0&navpanes=0";
+            iframe.src = file + "#toolbar=0&navpanes=0&view=FitH";
             iframe.className = "cert-modal-pdf";
             iframe.title = title;
             wrapper.appendChild(iframe);
