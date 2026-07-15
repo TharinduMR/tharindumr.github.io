@@ -73,8 +73,12 @@ class Cursor {
             self.removeState(this.dataset.cursor);
         }).on('mouseenter', '[data-cursor-text]', function () {
             self.setText(this.dataset.cursorText);
+            if (this.dataset.cursorText.toLowerCase() === 'drag') {
+                self.el.addClass('-drag');
+            }
         }).on('mouseleave', '[data-cursor-text]', function () {
             self.removeText();
+            self.el.removeClass('-drag');
         }).on('mouseenter', '[data-cursor-stick]', function () {
             self.setStick(this.dataset.cursorStick);
         }).on('mouseleave', '[data-cursor-stick]', function () {

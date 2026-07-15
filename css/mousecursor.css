@@ -141,9 +141,22 @@
 	-ms-transform: scale(1.32);
 	-o-transform: scale(1.32);
 	transform: scale(1.32);
-    mix-blend-mode: normal;
-    background: transparent;
-    border: 2px solid #00cdac;
+    mix-blend-mode: exclusion;
+    background: white;
+    border: none;
+}
+.cb-cursor.-drag:not(.-opaque) {
+    mix-blend-mode: normal !important;
+}
+.cb-cursor.-drag:not(.-opaque):before {
+    backdrop-filter: none !important;
+    mix-blend-mode: normal !important;
+    background: transparent !important;
+    border: 2px solid #00cdac !important;
+}
+
+.cb-cursor.-text {
+    mix-blend-mode: exclusion;
 }
 
 .cb-cursor.-text .cb-cursor-text {

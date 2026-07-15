@@ -2,11 +2,11 @@
 <html lang="en">
 
 <head>
-<script>
-window.onerror = function(message, source, lineno, colno, error) {
-    fetch('http://localhost:8001/log_error', { method: 'POST', body: message + ' at line ' + lineno + ' in ' + source });
-};
-</script>
+    <script>
+        window.onerror = function (message, source, lineno, colno, error) {
+            fetch('http://localhost:8001/log_error', { method: 'POST', body: message + ' at line ' + lineno + ' in ' + source });
+        };
+    </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +24,7 @@ window.onerror = function(message, source, lineno, colno, error) {
         href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/animate.css">
 </head>
 
 <body class="cursor-main">
@@ -51,7 +51,8 @@ window.onerror = function(message, source, lineno, colno, error) {
                 </svg>
             </a>
 
-            <a href="#experience" title="Experience" class="dock-btn" id="dock-btn-experience" data-cursor-stick="#dock-btn-experience">
+            <a href="#experience" title="Experience" class="dock-btn" id="dock-btn-experience"
+                data-cursor-stick="#dock-btn-experience">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
                     stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
@@ -59,7 +60,8 @@ window.onerror = function(message, source, lineno, colno, error) {
                 </svg>
             </a>
 
-            <a href="#projects" title="Projects" class="dock-btn" id="dock-btn-projects" data-cursor-stick="#dock-btn-projects">
+            <a href="#projects" title="Projects" class="dock-btn" id="dock-btn-projects"
+                data-cursor-stick="#dock-btn-projects">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
                     stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="3" width="7" height="7" rx="1"></rect>
@@ -78,7 +80,8 @@ window.onerror = function(message, source, lineno, colno, error) {
                 </svg>
             </a>
 
-            <a href="#contact" title="Contact" class="dock-btn" id="dock-btn-contact" data-cursor-stick="#dock-btn-contact">
+            <a href="#contact" title="Contact" class="dock-btn" id="dock-btn-contact"
+                data-cursor-stick="#dock-btn-contact">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
                     stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
@@ -233,7 +236,8 @@ window.onerror = function(message, source, lineno, colno, error) {
                     </div>
                     <!-- Education Card -->
                     <div class="education-card">
-                        <h3 data-cursor="-opaque"><i class="fa-solid fa-graduation-cap"></i> BSc(Hons) - Mechanical Engineering</h3>
+                        <h3 data-cursor="-opaque"><i class="fa-solid fa-graduation-cap"></i> BSc(Hons) - Mechanical
+                            Engineering</h3>
                         <p class="uni">University of Peradeniya (Specialized in Energy Systems)</p>
                         <p class="date">June 2021 - Aug 2025</p>
                         <ul class="coursework">
@@ -349,156 +353,170 @@ window.onerror = function(message, source, lineno, colno, error) {
     <section id="projects" class="section">
         <div class="container wow fadeInUp">
             <h2 class="section-title" data-cursor="-opaque">Featured Projects</h2>
-            <div class="swiper project-swiper" style="padding-bottom: 40px;"><div class="swiper-wrapper">
-                <div class="swiper-slide" data-cursor-text="Drag">
-                <div class="project-card glass-card">
-                    <div class="project-header">
-                        <div class="project-icon"><i class="fa-solid fa-wind"></i></div>
-                        <h3 data-cursor="-opaque">Low Velocity Wind Energy Harvesting</h3>
-                        <a href="javascript:void(0)" onclick="openModal('wind')" class="card-link-icon" data-cursor-text="Open"><i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                    <p class="tag">Final Year Project - 2025</p>
-                    <p>Designed a vibration-based, dual-body (NACA 0012 & Cylinder) energy harvesting system for
-                        low-speed wind environments. Achieved 87.5W peak power at 7.32% efficiency using PMLGs.</p>
-                    <div class="tech-stack">
-                        <span class="glass-tag">CFD</span><span class="glass-tag">ANSYS</span><span
-                            class="glass-tag">VIV &
-                            TIV</span><span class="glass-tag">SolidWorks</span><span
-                            class="glass-tag">Electromagnetics</span>
-                    </div>
-                    <div class="project-mini-gallery">
-                        <img src="wind1.png" alt="Preview 1">
-                        <img src="wind2.png" alt="Preview 2">
-                    </div>
-                    
-                </div>
-                </div>
+            <div class="swiper project-swiper" style="padding-bottom: 40px;">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" data-cursor-text="Drag">
+                        <div class="project-card glass-card">
+                            <div class="project-header">
+                                <div class="project-icon"><i class="fa-solid fa-wind"></i></div>
+                                <h3 data-cursor="-opaque">Low Velocity Wind Energy Harvesting</h3>
+                                <a href="javascript:void(0)" onclick="openModal('wind')" class="card-link-icon"
+                                    data-cursor-text="Open"><i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                            <p class="tag">Final Year Project - 2025</p>
+                            <p>Designed a vibration-based, dual-body (NACA 0012 & Cylinder) energy harvesting system for
+                                low-speed wind environments. Achieved 87.5W peak power at 7.32% efficiency using PMLGs.
+                            </p>
+                            <div class="tech-stack">
+                                <span class="glass-tag">CFD</span><span class="glass-tag">ANSYS</span><span
+                                    class="glass-tag">VIV &
+                                    TIV</span><span class="glass-tag">SolidWorks</span><span
+                                    class="glass-tag">Electromagnetics</span>
+                            </div>
+                            <div class="project-mini-gallery">
+                                <img src="wind1.png" alt="Preview 1">
+                                <img src="wind2.png" alt="Preview 2">
+                            </div>
 
-                <div class="swiper-slide" data-cursor-text="Drag">
-                <div class="project-card glass-card">
-                    <div class="project-header">
-                        <div class="project-icon"><i class="fa-solid fa-water"></i></div>
-                        <h3 data-cursor="-opaque">Design and CFD Analysis of Air & Dirt Separator</h3>
-                        <a href="javascript:void(0)" onclick="openModal('cfd')" class="card-link-icon" data-cursor-text="Open"><i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
                     </div>
-                    <p class="tag">Engineering Design Package</p>
-                    <p>Design and Conducted comprehensive multiphase CFD simulations to quantify pressure drop and
-                        separation
-                        efficiency for a 20-inch industrial separator. Analytically validated results across multiple
-                        flow rates.</p>
-                    <div class="tech-stack">
-                        <span class="glass-tag">ANSYS Fluent</span><span class="glass-tag">CFD</span><span
-                            class="glass-tag">DPM</span><span class="glass-tag">Multiphase flow</span>
-                    </div>
-                    <div class="project-mini-gallery">
-                        <img src="cfd1.png" alt="Velocity Contours">
-                        <img src="cfd2.png" alt="Streamlines">
-                    </div>
-                    
-                </div>
-                </div>
 
-                <div class="swiper-slide" data-cursor-text="Drag">
-                <div class="project-card glass-card">
-                    <div class="project-header">
-                        <div class="project-icon"><i class="fa-solid fa-heart-pulse"></i></div>
-                        <h3 data-cursor="-opaque">Measuring ECG via Defibrillator</h3>
-                        <a href="javascript:void(0)" onclick="openModal('ecg')" class="card-link-icon" data-cursor-text="Open"><i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                    <p class="tag">Mini Project - 2025</p>
-                    <p>Engineered a system to accurately measure ECG signals using high-impedance defibrillation
-                        electrodes, overcoming severe signal attenuation and noise issues.</p>
-                    <div class="tech-stack">
-                        <span class="glass-tag">MATLAB</span><span class="glass-tag">Python</span><span
-                            class="glass-tag">Signal Processing</span><span class="glass-tag">Biomedical
-                            Engineering</span>
-                    </div>
-                    <div class="project-mini-gallery">
-                        <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=150"
-                            alt="Preview 1">
-                        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=150"
-                            alt="Preview 2">
-                    </div>
-                    
-                </div>
-                </div>
+                    <div class="swiper-slide" data-cursor-text="Drag">
+                        <div class="project-card glass-card">
+                            <div class="project-header">
+                                <div class="project-icon"><i class="fa-solid fa-water"></i></div>
+                                <h3 data-cursor="-opaque">Design and CFD Analysis of Air & Dirt Separator</h3>
+                                <a href="javascript:void(0)" onclick="openModal('cfd')" class="card-link-icon"
+                                    data-cursor-text="Open"><i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                            <p class="tag">Engineering Design Package</p>
+                            <p>Design and Conducted comprehensive multiphase CFD simulations to quantify pressure drop
+                                and
+                                separation
+                                efficiency for a 20-inch industrial separator. Analytically validated results across
+                                multiple
+                                flow rates.</p>
+                            <div class="tech-stack">
+                                <span class="glass-tag">ANSYS Fluent</span><span class="glass-tag">CFD</span><span
+                                    class="glass-tag">DPM</span><span class="glass-tag">Multiphase flow</span>
+                            </div>
+                            <div class="project-mini-gallery">
+                                <img src="cfd1.png" alt="Velocity Contours">
+                                <img src="cfd2.png" alt="Streamlines">
+                            </div>
 
-                <div class="swiper-slide" data-cursor-text="Drag">
-                <div class="project-card glass-card">
-                    <div class="project-header">
-                        <div class="project-icon"><i class="fa-solid fa-shoe-prints"></i></div>
-                        <h3 data-cursor="-opaque">Footstep Power Generation</h3>
-                        <a href="javascript:void(0)" onclick="openModal('foot')" class="card-link-icon" data-cursor-text="Open"><i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
                     </div>
-                    <p class="tag">Academic Project - 2023</p>
-                    <p>Developed a system to harvest kinetic energy from human footsteps using electromagnetic
-                        induction, optimized via simulations for low-traffic staircases.</p>
-                    <div class="tech-stack">
-                        <span class="glass-tag">Renewable
-                            Energy</span><span class="glass-tag">Simulation</span><span
-                            class="glass-tag">SolidWorks</span><span class="glass-tag">ANSYS</span><span
-                            class="glass-tag">Vibration
-                            & Motion Analysis</span>
-                    </div>
-                    <div class="project-mini-gallery">
-                        <img src="foot1.png" alt="Preview 1">
-                        <img src="foot2.png" alt="Preview 2">
-                    </div>
-                    
-                </div>
-                </div>
 
-                <div class="swiper-slide" data-cursor-text="Drag">
-                <div class="project-card glass-card">
-                    <div class="project-header">
-                        <div class="project-icon"><i class="fa-solid fa-car-side"></i></div>
-                        <h3 data-cursor="-opaque">Designing Double wishbone suspension system</h3>
-                        <a href="javascript:void(0)" onclick="openModal('wish')" class="card-link-icon" data-cursor-text="Open"><i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                    <p class="tag">Academic Project - 2023</p>
-                    <p>Designing a double wishbone suspension system involves specifying the dimensions and
-                        characteristics of its main components. Design and structural analysis by FEA methods.</p>
-                    <div class="tech-stack">
-                        <span class="glass-tag">FEA</span><span class="glass-tag">Simulation</span><span
-                            class="glass-tag">3D-Modeling</span>
-                    </div>
-                    <div class="project-mini-gallery">
-                        <img src="wishbone1.PNG" alt="Preview 1">
-                        <img src="wishbone2.PNG" alt="Preview 2">
-                    </div>
-                    
-                </div>
-                </div>
-                <div class="swiper-slide" data-cursor-text="Drag">
-                <div class="project-card glass-card">
-                    <div class="project-header">
-                        <div class="project-icon"><i class="fa-solid fa-dumpster"></i></div>
-                        <h3 data-cursor="-opaque">Stationary Waste Compactor</h3>
-                        <a href="javascript:void(0)" onclick="openModal('trash')" class="card-link-icon" data-cursor-text="Open"><i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                    <p class="tag">Engineering Design Package</p>
-                    <p>Engineered a fully-automated, single-ram stationary compactor for North African transfer
-                        stations. Delivered full CAD GAs, hydraulic circuit sizing, PLC logic, and FEA specs.</p>
-                    <div class="tech-stack">
-                        <span class="glass-tag">SolidWorks</span><span class="glass-tag">Hydraulics</span><span
-                            class="glass-tag">PLC</span><span class="glass-tag">ANSYS</span><span
-                            class="glass-tag">HMI</span>
-                    </div>
-                    <div class="project-mini-gallery">
-                        <img src="compactor1.jpeg" alt="Preview 1">
-                        <img src="compactor2.jpeg" alt="Preview 2">
-                    </div>
-                    
-                </div>
-                </div>
+                    <div class="swiper-slide" data-cursor-text="Drag">
+                        <div class="project-card glass-card">
+                            <div class="project-header">
+                                <div class="project-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+                                <h3 data-cursor="-opaque">Measuring ECG via Defibrillator</h3>
+                                <a href="javascript:void(0)" onclick="openModal('ecg')" class="card-link-icon"
+                                    data-cursor-text="Open"><i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                            <p class="tag">Mini Project - 2025</p>
+                            <p>Engineered a system to accurately measure ECG signals using high-impedance defibrillation
+                                electrodes, overcoming severe signal attenuation and noise issues.</p>
+                            <div class="tech-stack">
+                                <span class="glass-tag">MATLAB</span><span class="glass-tag">Python</span><span
+                                    class="glass-tag">Signal Processing</span><span class="glass-tag">Biomedical
+                                    Engineering</span>
+                            </div>
+                            <div class="project-mini-gallery">
+                                <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=150"
+                                    alt="Preview 1">
+                                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=150"
+                                    alt="Preview 2">
+                            </div>
 
-            </div><!-- end swiper-wrapper -->
-            <div class="project-swiper-nav">
-                <div class="swiper-button-prev project-nav-btn" data-cursor-text="Prev"></div>
-                <div class="swiper-button-pause project-nav-btn" id="project-pause-btn" style="display:flex; justify-content:center; align-items:center; cursor:pointer;" data-cursor-text="Pause"><i class="fa-solid fa-pause"></i></div>
-                <div class="swiper-button-next project-nav-btn" data-cursor-text="Next"></div>
-            </div>
-        </div><!-- end swiper -->
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide" data-cursor-text="Drag">
+                        <div class="project-card glass-card">
+                            <div class="project-header">
+                                <div class="project-icon"><i class="fa-solid fa-shoe-prints"></i></div>
+                                <h3 data-cursor="-opaque">Footstep Power Generation</h3>
+                                <a href="javascript:void(0)" onclick="openModal('foot')" class="card-link-icon"
+                                    data-cursor-text="Open"><i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                            <p class="tag">Academic Project - 2023</p>
+                            <p>Developed a system to harvest kinetic energy from human footsteps using electromagnetic
+                                induction, optimized via simulations for low-traffic staircases.</p>
+                            <div class="tech-stack">
+                                <span class="glass-tag">Renewable
+                                    Energy</span><span class="glass-tag">Simulation</span><span
+                                    class="glass-tag">SolidWorks</span><span class="glass-tag">ANSYS</span><span
+                                    class="glass-tag">Vibration
+                                    & Motion Analysis</span>
+                            </div>
+                            <div class="project-mini-gallery">
+                                <img src="foot1.png" alt="Preview 1">
+                                <img src="foot2.png" alt="Preview 2">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide" data-cursor-text="Drag">
+                        <div class="project-card glass-card">
+                            <div class="project-header">
+                                <div class="project-icon"><i class="fa-solid fa-car-side"></i></div>
+                                <h3 data-cursor="-opaque">Designing Double wishbone suspension system</h3>
+                                <a href="javascript:void(0)" onclick="openModal('wish')" class="card-link-icon"
+                                    data-cursor-text="Open"><i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                            <p class="tag">Academic Project - 2023</p>
+                            <p>Designing a double wishbone suspension system involves specifying the dimensions and
+                                characteristics of its main components. Design and structural analysis by FEA methods.
+                            </p>
+                            <div class="tech-stack">
+                                <span class="glass-tag">FEA</span><span class="glass-tag">Simulation</span><span
+                                    class="glass-tag">3D-Modeling</span>
+                            </div>
+                            <div class="project-mini-gallery">
+                                <img src="wishbone1.PNG" alt="Preview 1">
+                                <img src="wishbone2.PNG" alt="Preview 2">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="swiper-slide" data-cursor-text="Drag">
+                        <div class="project-card glass-card">
+                            <div class="project-header">
+                                <div class="project-icon"><i class="fa-solid fa-dumpster"></i></div>
+                                <h3 data-cursor="-opaque">Stationary Waste Compactor</h3>
+                                <a href="javascript:void(0)" onclick="openModal('trash')" class="card-link-icon"
+                                    data-cursor-text="Open"><i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                            <p class="tag">Engineering Design Package</p>
+                            <p>Engineered a fully-automated, single-ram stationary compactor for North African transfer
+                                stations. Delivered full CAD GAs, hydraulic circuit sizing, PLC logic, and FEA specs.
+                            </p>
+                            <div class="tech-stack">
+                                <span class="glass-tag">SolidWorks</span><span class="glass-tag">Hydraulics</span><span
+                                    class="glass-tag">PLC</span><span class="glass-tag">ANSYS</span><span
+                                    class="glass-tag">HMI</span>
+                            </div>
+                            <div class="project-mini-gallery">
+                                <img src="compactor1.jpeg" alt="Preview 1">
+                                <img src="compactor2.jpeg" alt="Preview 2">
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div><!-- end swiper-wrapper -->
+                <div class="project-swiper-nav">
+                    <div class="swiper-button-prev project-nav-btn" data-cursor-text="Prev"></div>
+                    <div class="swiper-button-pause project-nav-btn" id="project-pause-btn"
+                        style="display:flex; justify-content:center; align-items:center; cursor:pointer;"
+                        data-cursor-text="Pause"><i class="fa-solid fa-pause"></i></div>
+                    <div class="swiper-button-next project-nav-btn" data-cursor-text="Next"></div>
+                </div>
+            </div><!-- end swiper -->
         </div><!-- end container -->
     </section>
 
@@ -534,12 +552,11 @@ window.onerror = function(message, source, lineno, colno, error) {
             <div class="certifications mt-5">
                 <h3 data-cursor="-opaque">Certifications & Memberships</h3>
                 <ul class="cert-list">
-                    <li>
-                        <a href="cert_revit.pdf" class="popup-video cert-clickable" style="text-decoration:none; color:inherit; display:block;" data-cursor-text="View">
-                            <div class="cert-info"><i class="fa-solid fa-certificate"></i> Revit 2023: Essential Training
-                                for MEP (LinkedIn Learning)</div>
-                            <i class="fa-solid fa-eye cert-view-icon"></i>
-                        </a>
+                    <li class="cert-clickable" data-cursor-text="View"
+                        onclick="openCertModal('cert_revit.pdf','Revit 2023: Essential Training or MEP')">
+                        <div class="cert-info"><i class="fa-solid fa-certificate"></i> Revit 2023: Essential Training
+                            for MEP (LinkedIn Learning)</div>
+                        <i class="fa-solid fa-eye cert-view-icon"></i>
                     </li>
                     <li class="cert-clickable" data-cursor-text="View"
                         onclick="openCertModal('cert_project_management.pdf', 'Project Management Foundations')">
@@ -573,11 +590,11 @@ window.onerror = function(message, source, lineno, colno, error) {
                 <div class="contact-info">
                     <div class="contact-item">
                         <i class="fa-solid fa-envelope"></i>
-                        <p><a href="mailto:tharindu.rajapakshe99@gmail.com">tharindu.rajapakshe99@gmail.com</a></p>
+                        <p><a href="mailto:tharindu.rajapakshe99@gmail.com" data-cursor-text="Send an email">tharindu.rajapakshe99@gmail.com</a></p>
                     </div>
                     <div class="contact-item">
                         <i class="fa-solid fa-phone"></i>
-                        <p><a href="tel:+94769007190">+94 76 900 7190</a></p>
+                        <p><a href="tel:+94769007190" data-cursor-text="Make a call">+94 76 900 7190</a></p>
                     </div>
                     <div class="contact-item">
                         <i class="fa-solid fa-location-dot"></i>
@@ -585,16 +602,16 @@ window.onerror = function(message, source, lineno, colno, error) {
                     </div>
                     <div class="contact-item">
                         <i class="fa-brands fa-linkedin"></i>
-                        <p><a href="https://www.linkedin.com/in/tharindu-madhuanka-1bb90a194" target="_blank">Tharindu
+                        <p><a href="https://www.linkedin.com/in/tharindu-madhuanka-1bb90a194" target="_blank" data-cursor-text="Visit profile">Tharindu
                                 Madhusanka</a></p>
                     </div>
                     <div class="contact-item">
                         <i class="fa-brands fa-github"></i>
-                        <p><a href="https://github.com/TharinduMR" target="_blank">Tharindu Madhuanka</a></p>
+                        <p><a href="https://github.com/TharinduMR" target="_blank" data-cursor-text="Visit profile">Tharindu Madhuanka</a></p>
                     </div>
                     <div class="contact-item">
                         <i class="fa-brands fa-facebook"></i>
-                        <p><a href="https://web.facebook.com/TharinduM.Rajapaksha" target="_blank">Tharindu Madhuanka
+                        <p><a href="https://web.facebook.com/TharinduM.Rajapaksha" target="_blank" data-cursor-text="Visit profile">Tharindu Madhuanka
                                 Rajapakshe</a></p>
                     </div>
 

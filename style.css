@@ -61,7 +61,7 @@ h4 {
 
 /* Layout */
 .container {
-    max-width: 1200px;
+    max-width: 85%;
     margin: 0 auto;
     padding: 0 2rem;
     overflow-x: hidden;
@@ -230,7 +230,7 @@ h4 {
 
 .hero-content {
     width: 100%;
-    max-width: 1200px;
+    max-width: 85%;
     text-align: center;
     z-index: 1;
 }
