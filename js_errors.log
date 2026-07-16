@@ -1,0 +1,2 @@
+Uncaught SyntaxError: Invalid or unexpected token at line 98 in http://localhost:8000/js/magiccursor.js
+Uncaught SyntaxError: Unexpected identifier 'freeMode' at line 306 in http://localhost:8000/script.js?v=4

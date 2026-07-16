@@ -168,11 +168,15 @@ function closeModal() {
 window.onclick = function (event) {
     const modalElement = document.getElementById("project-modal");
     const certModalElement = document.getElementById("cert-modal");
+    const msgModalElement = document.getElementById("message-modal");
     if (event.target == modalElement) {
         closeModal();
     }
     if (event.target == certModalElement) {
         closeCertModal();
+    }
+    if (event.target == msgModalElement) {
+        closeMessageModal();
     }
 }
 
@@ -222,6 +226,23 @@ function openCertModal(src, title) {
 function closeCertModal() {
     const certModal = document.getElementById("cert-modal");
     certModal.classList.remove("show");
+    document.body.style.overflow = "auto";
+}
+
+// Message Modal Functions
+function openMessageModal() {
+    const modalElement = document.getElementById("message-modal");
+    if (modalElement) {
+        modalElement.classList.add("show");
+        document.body.style.overflow = "hidden";
+    }
+}
+
+function closeMessageModal() {
+    const modalElement = document.getElementById("message-modal");
+    if (modalElement) {
+        modalElement.classList.remove("show");
+    }
     document.body.style.overflow = "auto";
 }
 
@@ -402,3 +423,72 @@ $(function () {
         });
     }
 });
+
+// Message Form Submission Logic
+const messageForm = document.getElementById('message-form');
+const formResult = document.getElementById('form-result');
+
+if (messageForm) {
+    messageForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(messageForm);
+        const object = Object.fromEntries(formData);
+        const json = JSON.stringify(object);
+        
+        const submitBtn = messageForm.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.innerHTML = "Sending...";
+        submitBtn.disabled = true;
+
+        fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: json
+        })
+        .then(async (response) => {
+            let jsonResponse = await response.json();
+            if (response.status == 200) {
+                formResult.innerHTML = "Message sent successfully! Redirecting to WhatsApp...";
+                formResult.style.color = "var(--accent-1)";
+                
+                // Get form values for WhatsApp
+                const name = document.getElementById('msg-name').value;
+                const email = document.getElementById('msg-email').value;
+                const topic = document.getElementById('msg-topic').value;
+                const message = document.getElementById('msg-text').value;
+                
+                // Construct WhatsApp message
+                const whatsappText = `From: ${name}\nEmail: ${email}\nTopic: ${topic}\n\n${message}`;
+                const whatsappUrl = `https://wa.me/94769007190?text=${encodeURIComponent(whatsappText)}`;
+                
+                // Open WhatsApp in a new tab
+                setTimeout(() => {
+                    window.open(whatsappUrl, '_blank');
+                    messageForm.reset();
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.disabled = false;
+                    formResult.innerHTML = "";
+                    closeMessageModal();
+                }, 1500);
+                
+            } else {
+                console.log(response);
+                formResult.innerHTML = jsonResponse.message || "Something went wrong!";
+                formResult.style.color = "#ff4444";
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            formResult.innerHTML = "Something went wrong!";
+            formResult.style.color = "#ff4444";
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+        });
+    });
+}

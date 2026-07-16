@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Magnify Test</title>
+<style>
+  body {
+    background: #111;
+    color: #fff;
+    font-family: sans-serif;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  h1 {
+    font-size: 3rem;
+    cursor: none;
+  }
+  #magnifier-layer {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 1000;
+  }
+  .clone {
+    position: absolute;
+    margin: 0;
+    color: #00ffcc; /* to see the difference */
+    transform-origin: calc(var(--cursor-x) - var(--clone-left)) calc(var(--cursor-y) - var(--clone-top));
+    transform: scale(2);
+    clip-path: circle(60px at calc(var(--cursor-x) - var(--clone-left)) calc(var(--cursor-y) - var(--clone-top)));
+  }
+</style>
+</head>
+<body>
+
+<h1 class="magnify-target">Tharindu Madhusanka Rajapakshe</h1>
+
+<div id="magnifier-layer"></div>
+
+<script>
+  let cursorX = 0, cursorY = 0;
+  document.addEventListener('mousemove', e => {
+    cursorX = e.clientX;
+    cursorY = e.clientY;
+    document.documentElement.style.setProperty('--cursor-x', cursorX + 'px');
+    document.documentElement.style.setProperty('--cursor-y', cursorY + 'px');
+  });
+
+  const layer = document.getElementById('magnifier-layer');
+  let currentClone = null;
+
+  document.querySelectorAll('.magnify-target').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      let rect = el.getBoundingClientRect();
+      currentClone = el.cloneNode(true);
+      currentClone.className = 'clone';
+      currentClone.style.left = rect.left + 'px';
+      currentClone.style.top = rect.top + 'px';
+      currentClone.style.width = rect.width + 'px';
+      currentClone.style.height = rect.height + 'px';
+      currentClone.style.setProperty('--clone-left', rect.left + 'px');
+      currentClone.style.setProperty('--clone-top', rect.top + 'px');
+      layer.appendChild(currentClone);
+    });
+    el.addEventListener('mouseleave', () => {
+      if (currentClone) {
+        currentClone.remove();
+        currentClone = null;
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

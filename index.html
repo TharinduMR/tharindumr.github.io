@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="css/magnific-popup.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/swiper-bundle.min.css">
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="style.css?v=4">
     <link rel="stylesheet" href="liquid-glass.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -590,7 +590,8 @@
                 <div class="contact-info">
                     <div class="contact-item">
                         <i class="fa-solid fa-envelope"></i>
-                        <p><a href="mailto:tharindu.rajapakshe99@gmail.com" data-cursor-text="Send an email">tharindu.rajapakshe99@gmail.com</a></p>
+                        <p><a href="mailto:tharindu.rajapakshe99@gmail.com"
+                                data-cursor-text="Send an email">tharindu.rajapakshe99@gmail.com</a></p>
                     </div>
                     <div class="contact-item">
                         <i class="fa-solid fa-phone"></i>
@@ -602,14 +603,21 @@
                     </div>
                     <div class="contact-item">
                         <i class="fa-brands fa-linkedin"></i>
-                        <p><a href="https://www.linkedin.com/in/tharindu-madhuanka-1bb90a194" target="_blank" data-cursor-text="Visit profile">Tharindu
+                        <p><a href="https://www.linkedin.com/in/tharindu-madhuanka-1bb90a194" target="_blank"
+                                data-cursor-text="Visit profile">Tharindu
                                 Madhusanka</a></p>
                     </div>
                     <div class="contact-item">
                         <i class="fa-brands fa-github"></i>
-                        <p><a href="https://github.com/TharinduMR" target="_blank" data-cursor-text="Visit profile">Tharindu Madhuanka</a></p>
+                        <p><a href="https://github.com/TharinduMR" target="_blank"
+                                data-cursor-text="Visit profile">Tharindu Madhuanka</a></p>
                     </div>
-                   
+                    <div class="contact-item">
+                        <i class="fa-brands fa-facebook"></i>
+                        <p><a href="https://web.facebook.com/TharinduM.Rajapaksha" target="_blank"
+                                data-cursor-text="Visit profile">Tharindu Madhuanka
+                                Rajapakshe</a></p>
+                    </div>
 
                 </div>
             </div>
@@ -625,10 +633,10 @@
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/wow.min.js"></script>
     <script src="js/gsap.min.js"></script>
-    <script src="js/magiccursor.js?v=2"></script>
+    <script src="js/magiccursor.js?v=3"></script>
     <script src="js/parallaxie.js"></script>
     <script src="js/swiper-bundle.min.js"></script>
-    <script src="script.js?v=4"></script>
+    <script src="script.js?v=5"></script>
 
     <!-- Project Modal -->
     <div id="project-modal" class="modal">
@@ -661,6 +669,43 @@
             <h2 id="cert-modal-title" class="cert-modal-title" data-cursor="-opaque">Certificate</h2>
             <div id="cert-content-wrapper" class="cert-content-wrapper">
                 <!-- Image or PDF iframe injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Modal -->
+    <div id="message-modal" class="modal">
+        <div class="modal-content glass-card">
+            <span class="close-modal" onclick="closeMessageModal()">&times;</span>
+            <div class="modal-header">
+                <h2 data-cursor="-opaque">Send Me a Message</h2>
+            </div>
+            <div class="modal-body">
+                <form id="message-form" class="message-form">
+                    <input type="hidden" name="access_key" value="148ab05f-6b34-4139-80b0-545c9d86f000">
+                    <input type="hidden" name="subject" value="New Message from Portfolio Website">
+                    <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
+                    <div class="form-group">
+                        <label for="msg-name">Name</label>
+                        <input type="text" id="msg-name" name="name" required class="glass-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="msg-email">Email Address</label>
+                        <input type="email" id="msg-email" name="email" required class="glass-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="msg-topic">Topic</label>
+                        <input type="text" id="msg-topic" name="topic" required class="glass-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="msg-text">Message</label>
+                        <textarea id="msg-text" name="message" rows="5" required class="glass-input"></textarea>
+                    </div>
+                    <button type="submit" class="btn primary" style="width: 100%; margin-top: 1rem;"
+                        data-cursor-text="Send">Send Message</button>
+                    <div id="form-result" class="form-result"></div>
+                </form>
             </div>
         </div>
     </div>
