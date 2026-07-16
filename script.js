@@ -474,3 +474,64 @@ if (messageForm) {
         }
     });
 }
+
+// Chatbot Logic
+const chatToggle = document.getElementById('chatbot-toggle');
+const chatWidget = document.getElementById('chat-widget');
+const closeChat = document.getElementById('close-chat');
+const chatBox = document.getElementById('chat-box');
+const chatInput = document.getElementById('chat-input');
+const sendBtn = document.getElementById('send-btn');
+
+if (chatToggle && chatWidget) {
+    chatToggle.addEventListener('click', () => {
+        chatWidget.classList.toggle('hidden');
+        if (!chatWidget.classList.contains('hidden')) {
+            chatInput.focus();
+        }
+    });
+
+    closeChat.addEventListener('click', () => {
+        chatWidget.classList.add('hidden');
+    });
+
+    async function sendChatMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        // Display user message
+        chatBox.innerHTML += `<div class="message user-msg">${message}</div>`;
+        chatInput.value = '';
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        try {
+            // Note: During local testing, you will need to run the Node.js backend on port 3000
+            // and change this URL to http://localhost:3000/api/chat
+            // For production, replace this with your deployed backend URL.
+            const BACKEND_URL = 'http://localhost:3000/api/chat';
+            
+            const response = await fetch(BACKEND_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message })
+            });
+
+            if (!response.ok) throw new Error('Network response was not ok');
+
+            const data = await response.json();
+            
+            // Display bot reply
+            chatBox.innerHTML += `<div class="message bot-msg">${data.reply}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+        } catch (error) {
+            chatBox.innerHTML += `<div class="message bot-msg" style="color: #ff4444;">Error: Could not reach the AI server. Please make sure the backend is running.</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    }
+
+    sendBtn.addEventListener('click', sendChatMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendChatMessage();
+    });
+}
