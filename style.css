@@ -1631,7 +1631,7 @@ footer {
     transform-origin: bottom right;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     padding: 0;
-    background: rgba(15, 18, 25, 0.95) !important;
+    background: rgba(15, 18, 25, 0.80) !important;
     backdrop-filter: blur(24px) !important;
     -webkit-backdrop-filter: blur(24px) !important;
 }
@@ -1654,9 +1654,8 @@ footer {
 .chat-header h3 {
     margin: 0;
     font-size: 1.2rem;
-    background: var(--gradient-text);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--accent-1);
+    font-weight: 600;
 }
 
 .close-chat {
