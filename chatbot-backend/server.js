@@ -74,7 +74,7 @@ app.post('/api/chat', async (req, res) => {
 
     try {
         const geminiApiKey = process.env.GEMINI_API_KEY || API_KEY;
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemma-4-26b-a4b-it:generateContent?key=${geminiApiKey}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -111,7 +111,9 @@ app.post('/api/chat', async (req, res) => {
             throw new Error(data.error?.message || 'API error');
         }
 
-        const botReply = data.candidates[0].content.parts[0].text;
+        const parts = data.candidates[0].content.parts;
+        const textPart = parts.find(p => !p.thought) || parts[parts.length - 1];
+        const botReply = textPart.text;
         
         res.json({ reply: botReply });
 
