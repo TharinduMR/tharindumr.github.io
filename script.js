@@ -429,29 +429,29 @@ const messageForm = document.getElementById('message-form');
 const formResult = document.getElementById('form-result');
 
 if (messageForm) {
-    messageForm.addEventListener('submit', function(e) {
+    messageForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const formData = new FormData(messageForm);
-        const object = Object.fromEntries(formData);
-        const json = JSON.stringify(object);
+        // Ensure access key is present
+        if(!formData.has('access_key')) {
+            formData.append("access_key", "148ab05f-6b34-4139-80b0-545c9d86f000");
+        }
         
         const submitBtn = messageForm.querySelector('button[type="submit"]');
         const originalBtnText = submitBtn.innerHTML;
         submitBtn.innerHTML = "Sending...";
         submitBtn.disabled = true;
 
-        fetch('https://api.web3forms.com/submit', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: json
-        })
-        .then(async (response) => {
-            let jsonResponse = await response.json();
-            if (response.status == 200) {
+        try {
+            const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
                 formResult.innerHTML = "Message sent successfully! Redirecting to WhatsApp...";
                 formResult.style.color = "var(--accent-1)";
                 
@@ -477,18 +477,17 @@ if (messageForm) {
                 
             } else {
                 console.log(response);
-                formResult.innerHTML = jsonResponse.message || "Something went wrong!";
+                formResult.innerHTML = data.message || "Something went wrong!";
                 formResult.style.color = "#ff4444";
                 submitBtn.innerHTML = originalBtnText;
                 submitBtn.disabled = false;
             }
-        })
-        .catch(error => {
+        } catch (error) {
             console.log(error);
-            formResult.innerHTML = "Something went wrong!";
+            formResult.innerHTML = "Something went wrong! Please try again.";
             formResult.style.color = "#ff4444";
             submitBtn.innerHTML = originalBtnText;
             submitBtn.disabled = false;
-        });
+        }
     });
 }
