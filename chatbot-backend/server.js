@@ -73,18 +73,16 @@ app.post('/api/chat', async (req, res) => {
     `;
 
     try {
-        const response = await fetch('https://open.bigmodel.cn/api/paas/v4/chat/completions', {
+        const geminiApiKey = process.env.GEMINI_API_KEY || API_KEY;
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${API_KEY}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: 'glm-4', 
-                messages: [
-                    {
-                        role: 'system',
-                        content: `You are a professional, highly intelligent, and helpful technical recruiter chatbot for Tharindu Madhusanka Rajapakshe's portfolio website. 
+                systemInstruction: {
+                    parts: [{
+                        text: `You are a professional, highly intelligent, and helpful technical recruiter chatbot for Tharindu Madhusanka Rajapakshe's portfolio website. 
                         
                         You have access to highly detailed project reports. Use ONLY the information below to answer the user's questions. Do not use outside knowledge to guess his work history or project details.
                         
@@ -98,8 +96,10 @@ app.post('/api/chat', async (req, res) => {
                         3. Be conversational but highly technical. If asked about a project, use the specific numbers (e.g., SNR dB levels, Factor of Safety, Efficiency %, Hz frequencies, Algorithms) to prove Tharindu's deep technical expertise.
                         4. Format your responses clearly using Markdown (bullet points, bold text, newlines) for readability.
                         5. When greeted (e.g., "hello", "hi"), keep your first impression focused on his core identity: "Hello! I'm Tharindu Madhusanka Rajapakshe's technical recruiting assistant. I can help you learn more about his background as a Mechanical Engineer specializing in Energy Systems with an innovative mind!" DO NOT mention Full Stack Development in your initial greeting. Only bring up software and coding if the user asks specifically about deep skills, software, or AI.`
-                    },
-                    { role: 'user', content: userMessage }
+                    }]
+                },
+                contents: [
+                    { role: 'user', parts: [{ text: userMessage }] }
                 ]
             })
         });
@@ -111,7 +111,7 @@ app.post('/api/chat', async (req, res) => {
             throw new Error(data.error?.message || 'API error');
         }
 
-        const botReply = data.choices[0].message.content;
+        const botReply = data.candidates[0].content.parts[0].text;
         
         res.json({ reply: botReply });
 
