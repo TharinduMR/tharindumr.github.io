@@ -169,6 +169,7 @@ window.onclick = function (event) {
     const modalElement = document.getElementById("project-modal");
     const certModalElement = document.getElementById("cert-modal");
     const msgModalElement = document.getElementById("message-modal");
+    const successModalElement = document.getElementById("success-modal");
     if (event.target == modalElement) {
         closeModal();
     }
@@ -177,6 +178,9 @@ window.onclick = function (event) {
     }
     if (event.target == msgModalElement) {
         closeMessageModal();
+    }
+    if (event.target == successModalElement) {
+        closeSuccessModal();
     }
 }
 
@@ -240,6 +244,27 @@ function openMessageModal() {
 
 function closeMessageModal() {
     const modalElement = document.getElementById("message-modal");
+    if (modalElement) {
+        modalElement.classList.remove("show");
+    }
+    document.body.style.overflow = "auto";
+}
+
+// Success Modal Functions
+function openSuccessModal(message) {
+    const modalElement = document.getElementById("success-modal");
+    if (modalElement) {
+        if (message) {
+            const msgEl = document.getElementById("success-message");
+            if (msgEl) msgEl.innerText = message;
+        }
+        modalElement.classList.add("show");
+        document.body.style.overflow = "hidden";
+    }
+}
+
+function closeSuccessModal() {
+    const modalElement = document.getElementById("success-modal");
     if (modalElement) {
         modalElement.classList.remove("show");
     }
@@ -453,12 +478,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
 
                 if (response.ok) {
-                    alert("Success! Your message has been sent.");
+                    closeMessageModal();
+                    openSuccessModal("Your message has been sent successfully.");
                     messageForm.reset();
                     submitBtn.innerHTML = originalBtnText;
                     submitBtn.disabled = false;
                     formResult.innerHTML = "";
-                    closeMessageModal();
+
                 } else {
                     console.log(response);
                     formResult.innerHTML = data.message || "Something went wrong!";

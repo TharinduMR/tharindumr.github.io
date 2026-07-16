@@ -710,6 +710,19 @@
         </div>
     </div>
 
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content glass-card" style="text-align: center; padding: 2.5rem; max-width: 400px;">
+            <span class="close-modal" onclick="closeSuccessModal()">&times;</span>
+            <div style="font-size: 3rem; color: #00e676; margin-bottom: 1rem;">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h2 data-cursor="-opaque" style="margin-bottom: 1rem; color: var(--accent-1);">Success!</h2>
+            <p id="success-message" style="margin-bottom: 1.5rem; color: var(--text-muted);">Your message has been sent successfully.</p>
+            <button class="btn primary" onclick="closeSuccessModal()" style="width: 100%;">OK</button>
+        </div>
+    </div>
+
     <!-- Chatbot Toggle Button -->
     <button id="chatbot-toggle" class="chatbot-toggle" data-cursor-text="Chat">
         <i class="fa-solid fa-message"></i>
