@@ -6,8 +6,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Your secret API key from the .env file
-const API_KEY = process.env.Z_API_KEY;
+// Your secret API key from the .env file or Vercel
+const API_KEY = process.env.Z_API_KEY || process.env.ZAI_API_KEY;
 
 app.post('/api/chat', async (req, res) => {
     const userMessage = req.body.message;
