@@ -533,6 +533,11 @@ document.addEventListener('DOMContentLoaded', () => {
             chatInput.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
+            // Add typing indicator
+            const typingId = 'typing-' + Date.now();
+            chatBox.innerHTML += `<div id="${typingId}" class="message bot-msg typing-indicator"><span></span><span></span><span></span></div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+
             try {
                 const BACKEND_URL = 'https://portfolio-chatbot-backend-red.vercel.app/api/chat';
                 
@@ -546,6 +551,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const data = await response.json();
                 
+                // Remove typing indicator
+                const typingEl = document.getElementById(typingId);
+                if (typingEl) typingEl.remove();
+
                 // Parse markdown to HTML using marked.js, or fallback to simple regex if marked fails to load
                 let formattedReply = data.reply;
                 if (typeof marked !== 'undefined') {
@@ -556,9 +565,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Display bot reply
                 chatBox.innerHTML += `<div class="message bot-msg">${formattedReply}</div>`;
+                
+                // Render LaTeX Math if KaTeX is loaded
+                if (typeof renderMathInElement === 'function') {
+                    renderMathInElement(chatBox.lastElementChild, {
+                        delimiters: [
+                            {left: '$$', right: '$$', display: true},
+                            {left: '$', right: '$', display: false},
+                            {left: '\\(', right: '\\)', display: false},
+                            {left: '\\[', right: '\\]', display: true}
+                        ],
+                        throwOnError: false
+                    });
+                }
+                
+                // Enhance PDF links to be downloadable buttons
+                chatBox.lastElementChild.querySelectorAll('a[href$=".pdf"]').forEach(link => {
+                    link.setAttribute('download', '');
+                    link.classList.add('btn', 'primary');
+                    link.style.display = 'inline-block';
+                    link.style.marginTop = '8px';
+                    link.style.fontSize = '0.9rem';
+                    link.style.padding = '6px 12px';
+                    link.innerHTML = '<i class="fa-solid fa-download"></i> ' + link.innerText;
+                });
+
                 chatBox.scrollTop = chatBox.scrollHeight;
 
             } catch (error) {
+                // Remove typing indicator on error
+                const typingEl = document.getElementById(typingId);
+                if (typingEl) typingEl.remove();
+
                 chatBox.innerHTML += `<div class="message bot-msg" style="color: #ff4444;">Error: Could not reach the AI server. Please make sure the backend is running.</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
             }
