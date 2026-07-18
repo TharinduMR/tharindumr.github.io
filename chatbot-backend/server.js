@@ -314,7 +314,7 @@ app.post('/api/chat', async (req, res) => {
         const genAI = new GoogleGenerativeAI(geminiApiKey);
 
         const model = genAI.getGenerativeModel({
-            model: "gemini-2.5-flash",
+            model: "gemini-1.5-flash",
             systemInstruction: `You are a professional, highly intelligent, and helpful technical recruiter chatbot for Tharindu Madhusanka Rajapakshe's portfolio website. 
                         
             You have access to highly detailed project reports. Use ONLY the information below to answer the user's questions. Do not use outside knowledge to guess his work history or project details.
