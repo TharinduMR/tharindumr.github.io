@@ -330,14 +330,14 @@
 
     <script>
         const API_BASE = 'https://portfolio-chatbot-backend-red.vercel.app';
-        let authToken = sessionStorage.getItem('adminToken') || null;
+        let authToken = localStorage.getItem('adminToken') || null;
 
         // ---- ON LOAD ----
         window.addEventListener('DOMContentLoaded', () => {
             if (authToken) {
                 fetchStats().then(valid => {
                     if (valid) { showDashboard(); fetchMessages(); fetchChats(); }
-                    else { sessionStorage.removeItem('adminToken'); authToken = null; }
+                    else { localStorage.removeItem('adminToken'); authToken = null; }
                 });
             }
             // Tab click handlers
@@ -365,7 +365,7 @@
                 const data = await res.json();
                 if (res.ok && data.success) {
                     authToken = data.token;
-                    sessionStorage.setItem('adminToken', authToken);
+                    localStorage.setItem('adminToken', authToken);
                     showDashboard();
                     fetchStats(); fetchMessages(); fetchChats();
                 } else {
@@ -392,7 +392,7 @@
 
         async function logout() {
             try { await fetch(`${API_BASE}/api/admin/logout`, { method: 'POST', headers: { 'Authorization': `Bearer ${authToken}` } }); } catch (_) {}
-            authToken = null; sessionStorage.removeItem('adminToken'); location.reload();
+            authToken = null; localStorage.removeItem('adminToken'); location.reload();
         }
 
         // ---- FETCH ALL ----
