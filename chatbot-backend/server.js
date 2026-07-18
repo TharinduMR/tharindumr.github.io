@@ -2,29 +2,60 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const crypto = require('crypto');
+const mongoose = require('mongoose');
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// Your secret API key from the .env file or Vercel
+// ============================================================
+// MONGODB CONNECTION
+// ============================================================
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/portfolio_analytics';
+mongoose.connect(MONGODB_URI)
+    .then(() => console.log('✅ MongoDB connected'))
+    .catch(err => console.error('❌ MongoDB error:', err.message));
+
+// ============================================================
+// MONGODB SCHEMAS & MODELS
+// ============================================================
+const visitSchema = new mongoose.Schema({
+    ip: String,
+    userAgent: String,
+    page: String,
+    referrer: String,
+    timestamp: { type: Date, default: Date.now }
+});
+
+const chatSessionSchema = new mongoose.Schema({
+    sessionId: { type: String, index: true },
+    ip: String,
+    messages: [{
+        role: { type: String, enum: ['user', 'bot'] },
+        content: String,
+        timestamp: { type: Date, default: Date.now }
+    }],
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
+});
+
+const contactMessageSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    topic: String,
+    message: String,
+    read: { type: Boolean, default: false },
+    createdAt: { type: Date, default: Date.now }
+});
+
+const Visit = mongoose.model('Visit', visitSchema);
+const ChatSession = mongoose.model('ChatSession', chatSessionSchema);
+const ContactMessage = mongoose.model('ContactMessage', contactMessageSchema);
+
+// ============================================================
+// API KEY & ADMIN SESSIONS
+// ============================================================
 const API_KEY = process.env.Z_API_KEY || process.env.ZAI_API_KEY;
-
-// ============================================================
-// VISITOR ANALYTICS - In-Memory Store
-// Note: Data resets on serverless cold starts (Vercel).
-// For persistence, connect Vercel KV (Redis) in the future.
-// ============================================================
-const visitorStore = {
-    totalViews: 0,
-    dailyViews: {},      // { '2026-07-18': 5 }
-    uniqueIPs: new Set(),
-    recentVisits: [],    // Last 100 visits
-    chatMessages: 0,
-    startedAt: new Date().toISOString()
-};
-
-// Active admin sessions (token -> { createdAt })
 const adminSessions = new Map();
 
 // ---- Admin Auth Middleware ----
@@ -33,7 +64,6 @@ function requireAdmin(req, res, next) {
     if (!token || !adminSessions.has(token)) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
-    // Check if session expired (24h)
     const session = adminSessions.get(token);
     if (Date.now() - session.createdAt > 24 * 60 * 60 * 1000) {
         adminSessions.delete(token);
@@ -42,32 +72,51 @@ function requireAdmin(req, res, next) {
     next();
 }
 
-// ---- Track Visitor ----
-app.post('/api/track', (req, res) => {
-    const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.ip || 'unknown';
-    const userAgent = req.headers['user-agent'] || 'Unknown';
-    const today = new Date().toISOString().split('T')[0];
-    const referer = req.body.referrer || req.headers.referer || 'Direct';
+// ============================================================
+// VISITOR TRACKING
+// ============================================================
+app.post('/api/track', async (req, res) => {
+    try {
+        const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.ip || 'unknown';
+        const userAgent = req.headers['user-agent'] || 'Unknown';
+        const referer = req.body.referrer || req.headers.referer || 'Direct';
 
-    visitorStore.totalViews++;
-    visitorStore.dailyViews[today] = (visitorStore.dailyViews[today] || 0) + 1;
-    visitorStore.uniqueIPs.add(ip);
+        await Visit.create({
+            ip: ip.includes('.') ? ip.substring(0, ip.lastIndexOf('.')) + '.*' : ip.substring(0, 12) + '…',
+            userAgent: userAgent.substring(0, 200),
+            page: req.body.page || '/',
+            referrer: referer.substring(0, 200)
+        });
 
-    visitorStore.recentVisits.unshift({
-        timestamp: new Date().toISOString(),
-        ip: ip.includes('.') ? ip.substring(0, ip.lastIndexOf('.')) + '.*' : ip.substring(0, 12) + '…',
-        userAgent: userAgent.substring(0, 120),
-        page: req.body.page || '/',
-        referrer: referer.substring(0, 120)
-    });
-
-    // Keep only last 200 visits
-    if (visitorStore.recentVisits.length > 200) {
-        visitorStore.recentVisits = visitorStore.recentVisits.slice(0, 200);
+        const totalViews = await Visit.countDocuments();
+        res.json({ success: true, views: totalViews });
+    } catch (err) {
+        console.error('Track error:', err.message);
+        res.json({ success: false });
     }
-
-    res.json({ success: true, views: visitorStore.totalViews });
 });
+
+// ============================================================
+// CONTACT MESSAGE STORAGE
+// ============================================================
+app.post('/api/contact', async (req, res) => {
+    try {
+        const { name, email, topic, message } = req.body;
+        if (!name || !email || !message) {
+            return res.status(400).json({ success: false, message: 'Missing required fields' });
+        }
+
+        await ContactMessage.create({ name, email, topic, message });
+        res.json({ success: true, message: 'Message stored successfully' });
+    } catch (err) {
+        console.error('Contact save error:', err.message);
+        res.status(500).json({ success: false, message: 'Failed to store message' });
+    }
+});
+
+// ============================================================
+// ADMIN ENDPOINTS
+// ============================================================
 
 // ---- Admin Login ----
 app.post('/api/admin/login', (req, res) => {
@@ -84,7 +133,6 @@ app.post('/api/admin/login', (req, res) => {
                 adminSessions.delete(t);
             }
         }
-
         res.json({ success: true, token });
     } else {
         res.status(401).json({ success: false, message: 'Invalid password' });
@@ -98,36 +146,102 @@ app.post('/api/admin/logout', (req, res) => {
     res.json({ success: true });
 });
 
-// ---- Admin Stats ----
-app.get('/api/admin/stats', requireAdmin, (req, res) => {
-    const today = new Date().toISOString().split('T')[0];
+// ---- Admin Stats (aggregated from MongoDB) ----
+app.get('/api/admin/stats', requireAdmin, async (req, res) => {
+    try {
+        const now = new Date();
+        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-    // Build last 7 days data
-    const last7Days = [];
-    for (let i = 6; i >= 0; i--) {
-        const d = new Date();
-        d.setDate(d.getDate() - i);
-        const dateStr = d.toISOString().split('T')[0];
-        last7Days.push({
-            date: dateStr,
-            label: d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
-            views: visitorStore.dailyViews[dateStr] || 0
+        // Parallel queries for speed
+        const [totalViews, todayViews, uniqueVisitors, totalChatMessages, totalContactMessages, last7DaysAgg, recentVisits] = await Promise.all([
+            Visit.countDocuments(),
+            Visit.countDocuments({ timestamp: { $gte: startOfToday } }),
+            Visit.distinct('ip').then(ips => ips.length),
+            ChatSession.aggregate([{ $unwind: '$messages' }, { $match: { 'messages.role': 'user' } }, { $count: 'total' }]).then(r => r[0]?.total || 0),
+            ContactMessage.countDocuments(),
+            // Last 7 days aggregation
+            Visit.aggregate([
+                { $match: { timestamp: { $gte: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000) } } },
+                { $group: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$timestamp' } }, views: { $sum: 1 } } },
+                { $sort: { _id: 1 } }
+            ]),
+            Visit.find().sort({ timestamp: -1 }).limit(30).lean()
+        ]);
+
+        // Build last 7 days with labels
+        const last7Days = [];
+        for (let i = 6; i >= 0; i--) {
+            const d = new Date(now);
+            d.setDate(d.getDate() - i);
+            const dateStr = d.toISOString().split('T')[0];
+            const found = last7DaysAgg.find(a => a._id === dateStr);
+            last7Days.push({
+                date: dateStr,
+                label: d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                views: found ? found.views : 0
+            });
+        }
+
+        res.json({
+            totalViews,
+            todayViews,
+            uniqueVisitors,
+            chatMessages: totalChatMessages,
+            contactMessages: totalContactMessages,
+            last7Days,
+            recentVisits: recentVisits.map(v => ({
+                timestamp: v.timestamp,
+                ip: v.ip,
+                userAgent: v.userAgent,
+                page: v.page,
+                referrer: v.referrer
+            })),
+            dataStore: 'MongoDB'
         });
+    } catch (err) {
+        console.error('Stats error:', err.message);
+        res.status(500).json({ message: 'Failed to fetch stats' });
     }
-
-    res.json({
-        totalViews: visitorStore.totalViews,
-        todayViews: visitorStore.dailyViews[today] || 0,
-        uniqueVisitors: visitorStore.uniqueIPs.size,
-        chatMessages: visitorStore.chatMessages,
-        last7Days,
-        recentVisits: visitorStore.recentVisits.slice(0, 30),
-        serverStartedAt: visitorStore.startedAt
-    });
 });
 
+// ---- Admin: Get Contact Messages ----
+app.get('/api/admin/messages', requireAdmin, async (req, res) => {
+    try {
+        const messages = await ContactMessage.find().sort({ createdAt: -1 }).limit(50).lean();
+        const unreadCount = await ContactMessage.countDocuments({ read: false });
+        res.json({ messages, unreadCount });
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to fetch messages' });
+    }
+});
+
+// ---- Admin: Mark Message as Read ----
+app.put('/api/admin/messages/:id/read', requireAdmin, async (req, res) => {
+    try {
+        await ContactMessage.findByIdAndUpdate(req.params.id, { read: true });
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to update message' });
+    }
+});
+
+// ---- Admin: Get Chat History ----
+app.get('/api/admin/chats', requireAdmin, async (req, res) => {
+    try {
+        const chats = await ChatSession.find().sort({ updatedAt: -1 }).limit(50).lean();
+        res.json({ chats });
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to fetch chats' });
+    }
+});
+
+// ============================================================
+// AI CHATBOT ENDPOINT
+// ============================================================
 app.post('/api/chat', async (req, res) => {
     const userMessage = req.body.message;
+    const sessionId = req.body.sessionId || 'anonymous-' + Date.now();
+    const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.ip || 'unknown';
 
     // 1. YOUR COMPREHENSIVE KNOWLEDGE BASE
     const myPortfolioData = `
@@ -199,9 +313,8 @@ app.post('/api/chat', async (req, res) => {
         const { GoogleGenerativeAI } = require('@google/generative-ai');
         const genAI = new GoogleGenerativeAI(geminiApiKey);
 
-        // We use gemini-3.5-flash for the best modern precision and reliability
         const model = genAI.getGenerativeModel({
-            model: "gemini-3.5-flash",
+            model: "gemini-2.5-flash",
             systemInstruction: `You are a professional, highly intelligent, and helpful technical recruiter chatbot for Tharindu Madhusanka Rajapakshe's portfolio website. 
                         
             You have access to highly detailed project reports. Use ONLY the information below to answer the user's questions. Do not use outside knowledge to guess his work history or project details.
@@ -226,7 +339,7 @@ app.post('/api/chat', async (req, res) => {
         const chat = model.startChat({
             history: [],
             generationConfig: {
-                temperature: 0.2, // Lower temperature for more factual, precise responses
+                temperature: 0.2,
                 maxOutputTokens: 800,
             }
         });
@@ -234,7 +347,20 @@ app.post('/api/chat', async (req, res) => {
         const result = await chat.sendMessage(userMessage);
         const botReply = result.response.text();
 
-        visitorStore.chatMessages++;
+        // Store chat in MongoDB
+        try {
+            let chatSession = await ChatSession.findOne({ sessionId });
+            if (!chatSession) {
+                chatSession = new ChatSession({ sessionId, ip, messages: [] });
+            }
+            chatSession.messages.push({ role: 'user', content: userMessage });
+            chatSession.messages.push({ role: 'bot', content: botReply });
+            chatSession.updatedAt = new Date();
+            await chatSession.save();
+        } catch (dbErr) {
+            console.error('Chat DB save error:', dbErr.message);
+        }
+
         res.json({ reply: botReply });
 
     } catch (error) {
@@ -243,6 +369,9 @@ app.post('/api/chat', async (req, res) => {
     }
 });
 
+// ============================================================
+// SERVER STARTUP
+// ============================================================
 if (process.env.NODE_ENV !== 'production') {
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

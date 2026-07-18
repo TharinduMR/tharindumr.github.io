@@ -478,6 +478,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
 
                 if (response.ok) {
+                    // Also store in our MongoDB backend for admin dashboard
+                    fetch('https://portfolio-chatbot-backend-red.vercel.app/api/contact', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: formData.get('name'),
+                            email: formData.get('email'),
+                            topic: formData.get('topic'),
+                            message: formData.get('message')
+                        })
+                    }).catch(() => {}); // Silent — Web3Forms is the primary delivery
+
                     closeMessageModal();
                     openSuccessModal("Your message has been sent successfully.");
                     messageForm.reset();
@@ -511,6 +523,12 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ page: window.location.pathname, referrer: document.referrer || 'Direct' })
     }).catch(() => {}); // Silent fail — don't block UI
+
+    // Generate unique session ID for chat history tracking
+    if (!sessionStorage.getItem('chatSessionId')) {
+        sessionStorage.setItem('chatSessionId', 'sess-' + Date.now() + '-' + Math.random().toString(36).substring(2, 8));
+    }
+    const chatSessionId = sessionStorage.getItem('chatSessionId');
 
     const chatToggle = document.getElementById('chatbot-toggle');
     const chatWidget = document.getElementById('chat-widget');
@@ -551,7 +569,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch(BACKEND_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message })
+                    body: JSON.stringify({ message: message, sessionId: chatSessionId })
                 });
 
                 if (!response.ok) throw new Error('Network response was not ok');
