@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const crypto = require('crypto');
 const app = express();
 
 app.use(cors());
@@ -8,6 +9,122 @@ app.use(express.json());
 
 // Your secret API key from the .env file or Vercel
 const API_KEY = process.env.Z_API_KEY || process.env.ZAI_API_KEY;
+
+// ============================================================
+// VISITOR ANALYTICS - In-Memory Store
+// Note: Data resets on serverless cold starts (Vercel).
+// For persistence, connect Vercel KV (Redis) in the future.
+// ============================================================
+const visitorStore = {
+    totalViews: 0,
+    dailyViews: {},      // { '2026-07-18': 5 }
+    uniqueIPs: new Set(),
+    recentVisits: [],    // Last 100 visits
+    chatMessages: 0,
+    startedAt: new Date().toISOString()
+};
+
+// Active admin sessions (token -> { createdAt })
+const adminSessions = new Map();
+
+// ---- Admin Auth Middleware ----
+function requireAdmin(req, res, next) {
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    if (!token || !adminSessions.has(token)) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    // Check if session expired (24h)
+    const session = adminSessions.get(token);
+    if (Date.now() - session.createdAt > 24 * 60 * 60 * 1000) {
+        adminSessions.delete(token);
+        return res.status(401).json({ message: 'Session expired' });
+    }
+    next();
+}
+
+// ---- Track Visitor ----
+app.post('/api/track', (req, res) => {
+    const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.ip || 'unknown';
+    const userAgent = req.headers['user-agent'] || 'Unknown';
+    const today = new Date().toISOString().split('T')[0];
+    const referer = req.body.referrer || req.headers.referer || 'Direct';
+
+    visitorStore.totalViews++;
+    visitorStore.dailyViews[today] = (visitorStore.dailyViews[today] || 0) + 1;
+    visitorStore.uniqueIPs.add(ip);
+
+    visitorStore.recentVisits.unshift({
+        timestamp: new Date().toISOString(),
+        ip: ip.includes('.') ? ip.substring(0, ip.lastIndexOf('.')) + '.*' : ip.substring(0, 12) + '…',
+        userAgent: userAgent.substring(0, 120),
+        page: req.body.page || '/',
+        referrer: referer.substring(0, 120)
+    });
+
+    // Keep only last 200 visits
+    if (visitorStore.recentVisits.length > 200) {
+        visitorStore.recentVisits = visitorStore.recentVisits.slice(0, 200);
+    }
+
+    res.json({ success: true, views: visitorStore.totalViews });
+});
+
+// ---- Admin Login ----
+app.post('/api/admin/login', (req, res) => {
+    const { password } = req.body;
+    const adminPassword = process.env.ADMIN_PASSWORD || 'tharindu@admin2026';
+
+    if (password === adminPassword) {
+        const token = crypto.randomBytes(32).toString('hex');
+        adminSessions.set(token, { createdAt: Date.now() });
+
+        // Clean expired sessions
+        for (const [t, data] of adminSessions) {
+            if (Date.now() - data.createdAt > 24 * 60 * 60 * 1000) {
+                adminSessions.delete(t);
+            }
+        }
+
+        res.json({ success: true, token });
+    } else {
+        res.status(401).json({ success: false, message: 'Invalid password' });
+    }
+});
+
+// ---- Admin Logout ----
+app.post('/api/admin/logout', (req, res) => {
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    if (token) adminSessions.delete(token);
+    res.json({ success: true });
+});
+
+// ---- Admin Stats ----
+app.get('/api/admin/stats', requireAdmin, (req, res) => {
+    const today = new Date().toISOString().split('T')[0];
+
+    // Build last 7 days data
+    const last7Days = [];
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const dateStr = d.toISOString().split('T')[0];
+        last7Days.push({
+            date: dateStr,
+            label: d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+            views: visitorStore.dailyViews[dateStr] || 0
+        });
+    }
+
+    res.json({
+        totalViews: visitorStore.totalViews,
+        todayViews: visitorStore.dailyViews[today] || 0,
+        uniqueVisitors: visitorStore.uniqueIPs.size,
+        chatMessages: visitorStore.chatMessages,
+        last7Days,
+        recentVisits: visitorStore.recentVisits.slice(0, 30),
+        serverStartedAt: visitorStore.startedAt
+    });
+});
 
 app.post('/api/chat', async (req, res) => {
     const userMessage = req.body.message;
@@ -117,6 +234,7 @@ app.post('/api/chat', async (req, res) => {
         const result = await chat.sendMessage(userMessage);
         const botReply = result.response.text();
 
+        visitorStore.chatMessages++;
         res.json({ reply: botReply });
 
     } catch (error) {

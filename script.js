@@ -505,6 +505,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Chatbot Logic
 document.addEventListener('DOMContentLoaded', () => {
+    // ---- Track Visitor (silent) ----
+    fetch('https://portfolio-chatbot-backend-red.vercel.app/api/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ page: window.location.pathname, referrer: document.referrer || 'Direct' })
+    }).catch(() => {}); // Silent fail — don't block UI
+
     const chatToggle = document.getElementById('chatbot-toggle');
     const chatWidget = document.getElementById('chat-widget');
     const closeChat = document.getElementById('close-chat');
