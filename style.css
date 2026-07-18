@@ -41,6 +41,23 @@ body {
     line-height: 1.6;
 }
 
+body[data-theme="light"] {
+    background: radial-gradient(ellipse 60% 50% at 90% 10%,
+            #fde6c4 0%,
+            transparent 55%),
+        radial-gradient(ellipse 50% 40% at 5% 90%, #fff0d8 0%, transparent 50%),
+        linear-gradient(180deg, #faf5ec 0%, #f7eedb 100%);
+    background-attachment: fixed;
+
+    /* Re-evaluate aliases for light theme since root is missing them */
+    --text-main: var(--color-text);
+    --text-muted: var(--color-text-muted);
+    --glass-bg: var(--glass-dark-md);
+    --glass-border: var(--glass-border-subtle);
+    --accent-1: var(--accent-aqua);
+    --accent-2: var(--accent-violet);
+}
+
 /* Typography */
 h1,
 h2,
@@ -132,6 +149,37 @@ h4 {
     -webkit-text-fill-color: transparent;
 }
 
+/* Theme Toggle Button */
+.theme-toggle {
+    position: absolute;
+    top: 2.2rem;
+    right: 14rem;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 1001;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.theme-toggle:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="light"] .theme-toggle:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
 /* Floating Dock Navigation */
 .floating-dock {
     position: fixed;
@@ -145,12 +193,13 @@ h4 {
     display: flex;
     align-items: center;
     gap: 0.375rem;
-    background-color: transparent;
+    background-color: rgba(10, 10, 12, 0.75);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 9999px;
     padding: 0.625rem 0.75rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .dock-divider {
@@ -174,8 +223,8 @@ h4 {
 }
 
 .dock-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.95);
     transform: translateY(-2px);
 }
 
@@ -184,8 +233,8 @@ h4 {
 }
 
 .dock-btn.active {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.95);
 }
 
 
@@ -216,17 +265,17 @@ h4 {
 
 .hero-bg-image {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: -15px;
+    left: -15px;
+    width: calc(100% + 30px);
+    height: calc(100% + 30px);
     background-image: url('hero_bg.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0.35;
+    opacity: 0.75;
     z-index: 0;
-    filter: blur(2px);
+    filter: blur(3px);
     transform: scale(1.05);
 }
 
@@ -250,27 +299,24 @@ h4 {
     font-size: clamp(3rem, 5vw, 6rem);
     line-height: 1.1;
     margin-bottom: 0.5rem;
-    color: #ffffff;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    color: var(--text-main);
 }
 
 .title {
     font-size: 2rem;
-    color: #ffffff;
+    color: var(--text-main);
     font-weight: 500;
     margin-bottom: 1rem;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
 .summary {
     font-size: 1.1rem;
-    color: #f8fafc;
+    color: var(--text-muted);
     line-height: 1.7;
     margin-bottom: 1.5rem;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .hero-skills-carousel {
@@ -296,8 +342,8 @@ h4 {
 
 .skill-bubble {
     padding: 0.75rem 1.5rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: 9999px;
     color: var(--text-muted);
     font-size: 0.95rem;
@@ -1459,20 +1505,21 @@ footer {
 
 
 :root {
-  --accent-color: #0891b2;
-  --accent-secondary-color: #5ee7df;
+    --accent-color: #0891b2;
+    --accent-secondary-color: #5ee7df;
 }
 
 
 /* Ensure Cursor is always on top */
-.cb-cursor, .cb-cursor-text {
-  z-index: 999999 !important;
+.cb-cursor,
+.cb-cursor-text {
+    z-index: 999999 !important;
 }
 
 
 /* Cursor Background Color */
 .cb-cursor:before {
-  background: linear-gradient(90.15deg, var(--accent-color) 1.15%, var(--accent-secondary-color) 98.84%);
+    background: linear-gradient(90.15deg, var(--accent-color) 1.15%, var(--accent-secondary-color) 98.84%);
 }
 
 /* Project Card Link Icon */
@@ -1492,6 +1539,7 @@ footer {
     transform: rotate(-45deg);
     flex-shrink: 0;
 }
+
 .card-link-icon:hover {
     background: var(--accent-color);
     border-color: var(--accent-color);
@@ -1508,6 +1556,7 @@ footer {
     position: relative;
     z-index: 10;
 }
+
 .project-nav-btn {
     position: static;
     margin-top: 0;
@@ -1519,9 +1568,11 @@ footer {
     color: var(--text-color);
     transition: all 0.3s ease;
 }
+
 .project-nav-btn::after {
     font-size: 1.2rem;
 }
+
 .project-nav-btn:hover {
     background: var(--accent-color);
     border-color: var(--accent-color);
@@ -1538,21 +1589,32 @@ footer {
 [data-cursor="-opaque"] {
     width: fit-content;
 }
-.section-title, .greeting, .name, .title {
+
+.section-title,
+.greeting,
+.name,
+.title {
     margin-left: auto;
     margin-right: auto;
 }
 
 
 /* Global Image Hover Zoom (1.5x) */
-.project-image img, .project-mini-gallery img, .timeline-images img, .hero-image-container img {
+.project-image img,
+.project-mini-gallery img,
+.timeline-images img,
+.hero-image-container img {
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
-.project-image img:hover, .project-mini-gallery img:hover, .timeline-images img:hover, .hero-image-container img:hover {
+
+.project-image img:hover,
+.project-mini-gallery img:hover,
+.timeline-images img:hover,
+.hero-image-container img:hover {
     transform: scale(1.5) !important;
     z-index: 10;
     position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 /* Message Form Styles */
@@ -1562,15 +1624,18 @@ footer {
     gap: 1rem;
     margin-top: 1rem;
 }
+
 .form-group {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
+
 .form-group label {
     font-size: 0.9rem;
     color: var(--text-muted);
 }
+
 .glass-input {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--glass-border);
@@ -1580,11 +1645,13 @@ footer {
     font-family: var(--font-body);
     transition: all 0.3s ease;
 }
+
 .glass-input:focus {
     outline: none;
     border-color: var(--accent-1);
     background: rgba(255, 255, 255, 0.1);
 }
+
 .form-result {
     text-align: center;
     margin-top: 10px;
@@ -1605,7 +1672,7 @@ footer {
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,242,254,0.4);
+    box-shadow: 0 4px 15px rgba(0, 242, 254, 0.4);
     z-index: 1000;
     transition: all 0.3s ease;
     display: flex;
@@ -1616,26 +1683,39 @@ footer {
 .chatbot-toggle:hover {
     transform: scale(1.1);
     background: var(--accent-2);
-    box-shadow: 0 6px 20px rgba(79,172,254,0.6);
+    box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
 }
 
 .chat-widget {
     position: fixed;
-    bottom: 100px;
+    bottom: 90px;
     right: 30px;
-    width: 350px;
-    max-height: 500px;
+    width: 360px;
+    height: 520px;
+    max-height: 85vh;
     display: flex;
     flex-direction: column;
     z-index: 1000;
     overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
     transform-origin: bottom right;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     padding: 0;
-    background: rgba(15, 18, 25, 0.80) !important;
+    background: rgba(15, 18, 25, 0.50) !important;
     backdrop-filter: blur(24px) !important;
     -webkit-backdrop-filter: blur(24px) !important;
+}
+
+.chat-resize-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 25px;
+    height: 25px;
+    cursor: nwse-resize;
+    z-index: 1002;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+    border-top-left-radius: 12px;
 }
 
 .chat-widget.hidden {
@@ -1645,9 +1725,9 @@ footer {
 }
 
 .chat-header {
-    padding: 1rem;
-    background: rgba(255,255,255,0.1);
-    border-bottom: 1px solid var(--glass-border);
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    background: transparent;
+    border-bottom: none;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1660,28 +1740,47 @@ footer {
     font-weight: 600;
 }
 
-.close-chat {
+.chat-header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.close-chat,
+.pin-chat {
     background: none;
     border: none;
     color: var(--text-main);
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     cursor: pointer;
     transition: color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.close-chat:hover {
+.close-chat {
+    font-size: 1.5rem;
+}
+
+.close-chat:hover,
+.pin-chat:hover {
+    color: var(--accent-1);
+}
+
+.pin-chat.pinned {
     color: var(--accent-1);
 }
 
 .chat-box {
     flex-grow: 1;
-    padding: 1rem;
+    padding: 0 1rem 0 1rem;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    min-height: 300px;
-    max-height: 350px;
+    height: calc(100% - 110px);
+    min-height: 150px;
 }
 
 .message {
@@ -1694,7 +1793,7 @@ footer {
 }
 
 .bot-msg {
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--glass-border);
     color: var(--text-main);
     align-self: flex-start;
@@ -1706,11 +1805,11 @@ footer {
     color: white;
     align-self: flex-end;
     border-bottom-right-radius: 4px;
-    box-shadow: 0 4px 10px rgba(0,242,254,0.2);
+    box-shadow: 0 4px 10px rgba(0, 242, 254, 0.2);
 }
 
 .chat-input-area {
-    padding: 1rem;
+    padding: 0.5rem 1rem;
     border-top: 1px solid var(--glass-border);
     display: flex;
     gap: 10px;
@@ -1740,6 +1839,17 @@ footer {
     transform: scale(1.05);
 }
 
+/* Light Theme overrides for chat widget */
+[data-theme="light"] .chat-widget {
+    background: rgba(255, 248, 232, 0.85) !important;
+}
+
+[data-theme="light"] .bot-msg {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--glass-border-subtle);
+    color: var(--color-text);
+}
+
 
 /* Chatbot Markdown Styling */
 .bot-msg p {
@@ -1750,7 +1860,8 @@ footer {
     margin-bottom: 0;
 }
 
-.bot-msg ul, .bot-msg ol {
+.bot-msg ul,
+.bot-msg ol {
     margin-left: 1.25rem;
     margin-bottom: 0.5rem;
 }
@@ -1765,9 +1876,48 @@ footer {
 }
 
 /* Typing Animation */
-.typing-indicator { display: flex; align-items: center; gap: 4px; padding: 12px 16px; width: fit-content; border-radius: 12px; background: rgba(255, 255, 255, 0.1); }
-.typing-indicator span { width: 6px; height: 6px; border-radius: 50%; background-color: #fff; opacity: 0.4; animation: typing 1.4s infinite both; }
-.typing-indicator span:nth-child(1) { animation-delay: 0s; }
-.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-@keyframes typing { 0%, 80%, 100% { transform: scale(0); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 16px;
+    width: fit-content;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.typing-indicator span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #fff;
+    opacity: 0.4;
+    animation: typing 1.4s infinite both;
+}
+
+.typing-indicator span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+        opacity: 0.4;
+    }
+
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

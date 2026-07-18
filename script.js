@@ -1,3 +1,33 @@
+// Theme Toggle Logic
+const themeToggle = document.getElementById('theme-toggle');
+const darkIcon = themeToggle ? themeToggle.querySelector('.dark-icon') : null;
+const lightIcon = themeToggle ? themeToggle.querySelector('.light-icon') : null;
+
+// Initialize theme from localStorage
+const savedTheme = localStorage.getItem('theme') || 'dark';
+if (savedTheme === 'light') {
+    document.body.setAttribute('data-theme', 'light');
+    if (darkIcon) darkIcon.style.display = 'none';
+    if (lightIcon) lightIcon.style.display = 'inline-block';
+}
+
+if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.body.getAttribute('data-theme');
+        if (currentTheme === 'light') {
+            document.body.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'dark');
+            if (darkIcon) darkIcon.style.display = 'inline-block';
+            if (lightIcon) lightIcon.style.display = 'none';
+        } else {
+            document.body.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+            if (darkIcon) darkIcon.style.display = 'none';
+            if (lightIcon) lightIcon.style.display = 'inline-block';
+        }
+    });
+}
+
 // Intersection Observer for Scroll Animations
 const revealElements = document.querySelectorAll('.reveal');
 
@@ -533,12 +563,55 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatToggle = document.getElementById('chatbot-toggle');
     const chatWidget = document.getElementById('chat-widget');
     const closeChat = document.getElementById('close-chat');
+    const pinChat = document.getElementById('pin-chat');
     const chatBox = document.getElementById('chat-box');
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
+    
+    let isChatPinned = false;
+
+    // Custom Top-Left Resize Logic
+    const resizeHandle = document.getElementById('chat-resize-handle');
+    let isResizing = false;
+    let startX, startY, startWidth, startHeight;
+
+    if (resizeHandle && chatWidget) {
+        resizeHandle.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startWidth = parseInt(document.defaultView.getComputedStyle(chatWidget).width, 10);
+            startHeight = parseInt(document.defaultView.getComputedStyle(chatWidget).height, 10);
+            
+            chatWidget.style.transition = 'none'; // Prevent lag during resize
+            
+            document.documentElement.addEventListener('mousemove', doDrag, false);
+            document.documentElement.addEventListener('mouseup', stopDrag, false);
+            e.preventDefault(); // Prevent text selection while dragging
+        });
+
+        function doDrag(e) {
+            if (!isResizing) return;
+            // When anchored at bottom/right, dragging left/up INCREASES width/height
+            const newWidth = startWidth - (e.clientX - startX);
+            const newHeight = startHeight - (e.clientY - startY);
+            
+            // Apply new dimensions with min constraints
+            chatWidget.style.width = Math.max(newWidth, 300) + 'px';
+            chatWidget.style.height = Math.max(newHeight, 400) + 'px';
+        }
+
+        function stopDrag() {
+            isResizing = false;
+            chatWidget.style.transition = ''; // Restore transition
+            document.documentElement.removeEventListener('mousemove', doDrag, false);
+            document.documentElement.removeEventListener('mouseup', stopDrag, false);
+        }
+    }
 
     if (chatToggle && chatWidget) {
-        chatToggle.addEventListener('click', () => {
+        chatToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
             chatWidget.classList.toggle('hidden');
             if (!chatWidget.classList.contains('hidden')) {
                 chatInput.focus();
@@ -547,6 +620,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         closeChat.addEventListener('click', () => {
             chatWidget.classList.add('hidden');
+        });
+        
+        if (pinChat) {
+            pinChat.addEventListener('click', () => {
+                isChatPinned = !isChatPinned;
+                if (isChatPinned) {
+                    pinChat.classList.add('pinned');
+                } else {
+                    pinChat.classList.remove('pinned');
+                }
+            });
+        }
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!isChatPinned && !chatWidget.classList.contains('hidden')) {
+                if (!chatWidget.contains(e.target) && !chatToggle.contains(e.target)) {
+                    chatWidget.classList.add('hidden');
+                }
+            }
         });
 
         async function sendChatMessage() {

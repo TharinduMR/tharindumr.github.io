@@ -139,30 +139,50 @@
        3. LIGHT THEME TOKENS
        -------------------------------------------------------------------------- */
 [data-theme="light"] {
+  /* ── User Provided Colors ── */
+  --bg: #faf5ec;
+  --bg-2: #f7eedb;
+  --cream: #fff8e8;
+  --dark: #0a0a0c;
+  --dark-2: #1a1a1c;
+  --text: #0a0a0c;
+  --text-2: #4a4a52;
+  --mute: #8a8a93;
+  --mute-2: #b8b8be;
+  --mint: #b8e6cf;
+  --mint-2: #9bd6b8;
+  --mint-3: #d4eedf;
+  --green: #22c55e;
+  --green-2: #16a34a;
+  --red: #e23744;
+  --red-2: #c41e2e;
+  --line: rgba(0, 0, 0, 0.08);
+  --line-2: rgba(0, 0, 0, 0.12);
+
   /* ── Surfaces ── */
-  --glass-white: rgba(255, 255, 255, 0.62);
-  --glass-white-md: rgba(255, 255, 255, 0.78);
-  --glass-white-lg: rgba(255, 255, 255, 0.9);
-  --glass-dark: rgba(0, 0, 0, 0.06);
-  --glass-dark-md: rgba(15, 23, 42, 0.08);
+  --glass-white: rgba(255, 248, 232, 0.62);
+  --glass-white-md: rgba(255, 248, 232, 0.78);
+  --glass-white-lg: rgba(255, 248, 232, 0.9);
+  --glass-dark: rgba(10, 10, 12, 0.06);
+  --glass-dark-md: rgba(10, 10, 12, 0.08);
 
   /* ── Borders — dark on light bg (white borders are invisible) ── */
-  --glass-border: rgba(15, 23, 42, 0.14);
-  --glass-border-subtle: rgba(15, 23, 42, 0.09);
-  --glass-border-bright: rgba(15, 23, 42, 0.22);
+  --glass-border: var(--line-2);
+  --glass-border-subtle: var(--line);
+  --glass-border-bright: rgba(0, 0, 0, 0.22);
 
   /* ── Shadows ── */
-  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  --shadow-float: 0 20px 60px rgba(0, 0, 0, 0.16),
-    0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-glass: 0 8px 32px rgba(10, 10, 12, 0.08),
+    inset 0 1px 0 rgba(255, 248, 232, 0.9);
+  --shadow-float: 0 20px 60px rgba(10, 10, 12, 0.12),
+    0 4px 16px rgba(10, 10, 12, 0.06);
 
   /* ── Background ── */
-  --color-bg: #e8f0fa;
-  --color-surface: rgba(255, 255, 255, 0.55);
-  --color-text: #0f172a;
-  --color-text-muted: rgba(15, 23, 42, 0.58);
-  --color-text-subtle: rgba(15, 23, 42, 0.38);
+  --color-bg: var(--bg);
+  --color-surface: rgba(250, 245, 236, 0.55);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-2);
+  --color-text-subtle: var(--mute);
 
   /* ── Reflections ── */
   --reflection-top: linear-gradient(
@@ -171,14 +191,9 @@
     rgba(255, 255, 255, 0) 50%
   );
   --reflection-inner: inset 0 1px 1px rgba(255, 255, 255, 0.95),
-    inset 0 -1px 1px rgba(0, 0, 0, 0.04);
+    inset 0 -1px 1px rgba(10, 10, 12, 0.04);
 
-  /* ── Accent colours — darkened for WCAG AA on light backgrounds ── */
-  --accent-aqua: #0891b2;
-  --accent-violet: #6d28d9;
-  --accent-rose: #be185d;
-  --accent-amber: #b45309;
-  --accent-lime: #15803d;
+  /* ── Accent colours are inherited from dark mode ── */
 }
 
 /* --------------------------------------------------------------------------
@@ -234,8 +249,8 @@
   animation: blob-drift var(--dur, 18s) ease-in-out infinite alternate;
 }
 
-[data-theme="light"] .scene__blob {
-  opacity: 0.3;
+[data-theme="light"] .scene {
+  display: none;
 }
 
 .scene__blob--1 {
@@ -344,6 +359,10 @@
 .glass-card {
   border-radius: var(--radius-xl);
   padding: var(--space-xl);
+  background: var(--color-surface);
+  border: 1px solid var(--glass-border-subtle);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
   transition: transform var(--dur-mid) var(--ease-glass),
     box-shadow var(--dur-mid) var(--ease-glass), background var(--dur-mid);
 }
