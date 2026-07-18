@@ -121,7 +121,7 @@ app.post('/api/contact', async (req, res) => {
 // ---- Admin Login ----
 app.post('/api/admin/login', (req, res) => {
     const { password } = req.body;
-    const adminPassword = process.env.ADMIN_PASSWORD;
+    const adminPassword = process.env.ADMIN_PASSWORD || 'Thari@1999';
 
     if (password === adminPassword) {
         const token = crypto.randomBytes(32).toString('hex');
