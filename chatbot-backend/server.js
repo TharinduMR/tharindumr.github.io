@@ -324,7 +324,7 @@ app.post('/api/chat', async (req, res) => {
             }
         });
 
-        // Stream response using SSE to avoid Vercel timeout
+        // SSE headers
         res.setHeader('Content-Type', 'text/event-stream');
         res.setHeader('Cache-Control', 'no-cache');
         res.setHeader('Connection', 'keep-alive');
@@ -332,18 +332,16 @@ app.post('/api/chat', async (req, res) => {
 
         const result = await chat.sendMessageStream(userMessage);
         let fullReply = '';
-
         for await (const chunk of result.stream) {
             const text = chunk.text();
             fullReply += text;
             res.write(`data: ${JSON.stringify({ chunk: text })}\n\n`);
         }
-
-        // Signal stream complete
+        // Finish stream
         res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
         res.end();
 
-        // Store chat in MongoDB (after streaming completes)
+        // Save chat history
         try {
             let chatSession = await ChatSession.findOne({ sessionId });
             if (!chatSession) {
@@ -356,10 +354,8 @@ app.post('/api/chat', async (req, res) => {
         } catch (dbErr) {
             console.error('Chat DB save error:', dbErr.message);
         }
-
     } catch (error) {
         console.error('Error:', error);
-        // If headers already sent (streaming started), just end
         if (res.headersSent) {
             res.write(`data: ${JSON.stringify({ error: 'Stream interrupted' })}\n\n`);
             res.end();
