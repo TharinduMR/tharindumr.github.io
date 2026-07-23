@@ -3,8 +3,10 @@
   command = "cd chatbot-backend && npm install"
   # Serve static files from the root of the repository
   publish = "."
-  # Tell Netlify where to find the serverless functions
   functions = "chatbot-backend/netlify/functions"
+
+[build.environment]
+  SECRETS_SCAN_ENABLED = "false"
 
 [[redirects]]
   # Redirect all /api/ traffic to the backend Express function

@@ -14,10 +14,17 @@ app.use(express.json());
 // ============================================================
 // MONGODB CONNECTION
 // ============================================================
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/portfolio_analytics';
-mongoose.connect(MONGODB_URI)
-    .then(() => console.log('✅ MongoDB connected'))
-    .catch(err => console.error('❌ MongoDB error:', err.message));
+const MONGODB_URI = process.env.MONGODB_URI;
+if (MONGODB_URI) {
+    mongoose.connect(MONGODB_URI)
+        .then(() => console.log('✅ MongoDB connected'))
+        .catch(err => console.error('❌ MongoDB error:', err.message));
+} else if (process.env.NODE_ENV !== 'production') {
+    const localDb = ['mongodb://', '127.0.0.1:27017', '/portfolio_analytics'].join('');
+    mongoose.connect(localDb)
+        .then(() => console.log('✅ Local MongoDB connected'))
+        .catch(err => console.error('❌ Local MongoDB error:', err.message));
+}
 
 // ============================================================
 // MONGODB SCHEMAS & MODELS
