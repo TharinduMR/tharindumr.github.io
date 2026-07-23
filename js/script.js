@@ -656,8 +656,12 @@ document.addEventListener('DOMContentLoaded', () => {
             chatBox.innerHTML += `<div id="${typingId}" class="message bot-msg typing-indicator"><span></span><span></span><span></span></div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            try {
-                const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') ? 'http://localhost:3000' : '';
+                let API_BASE = '';
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
+                    API_BASE = 'http://localhost:3000';
+                } else if (window.location.hostname.includes('github.io')) {
+                    API_BASE = 'https://tmrportfolio.netlify.app';
+                }
                 const BACKEND_URL = API_BASE + '/api/chat';
                 
                 const response = await fetch(BACKEND_URL, {
