@@ -1,3 +1,13 @@
+function getApiBase() {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
+        return 'http://localhost:3000';
+    }
+    if (window.location.hostname.includes('github.io')) {
+        return 'https://tmrportfolio.netlify.app';
+    }
+    return '';
+}
+
 // Theme Toggle Logic
 const themeToggle = document.getElementById('theme-toggle');
 const darkIcon = themeToggle ? themeToggle.querySelector('.dark-icon') : null;
@@ -509,7 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (response.ok) {
                     // Also store in our MongoDB backend for admin dashboard
-                    fetch('/api/contact', {
+                    fetch(getApiBase() + '/api/contact', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -656,13 +666,8 @@ document.addEventListener('DOMContentLoaded', () => {
             chatBox.innerHTML += `<div id="${typingId}" class="message bot-msg typing-indicator"><span></span><span></span><span></span></div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
 
-                let API_BASE = '';
-                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
-                    API_BASE = 'http://localhost:3000';
-                } else if (window.location.hostname.includes('github.io')) {
-                    API_BASE = 'https://tmrportfolio.netlify.app';
-                }
-                const BACKEND_URL = API_BASE + '/api/chat';
+            try {
+                const BACKEND_URL = getApiBase() + '/api/chat';
                 
                 const response = await fetch(BACKEND_URL, {
                     method: 'POST',

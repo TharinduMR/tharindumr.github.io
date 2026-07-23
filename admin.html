@@ -329,7 +329,9 @@
     </div>
 
     <script>
-        const API_BASE = '';
+        const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
+            ? 'http://localhost:3000'
+            : (window.location.hostname.includes('github.io') ? 'https://tmrportfolio.netlify.app' : '');
         let authToken = localStorage.getItem('adminToken') || null;
 
         // ---- ON LOAD ----
