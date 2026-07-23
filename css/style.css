@@ -1902,6 +1902,90 @@ footer {
     padding-top: 6px;
 }
 
+/* Chatbot Code Blocks & Copy Button Styling */
+.code-block-wrapper {
+    position: relative;
+    margin: 12px 0;
+    border-radius: 8px;
+    background: #141722;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.code-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.75rem;
+    color: #a0a5b5;
+}
+
+.code-lang {
+    font-family: monospace;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--accent-1);
+}
+
+.copy-code-btn, .copy-msg-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #c5cbd8;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 0.72rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.copy-code-btn:hover, .copy-msg-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+.copy-code-btn.copied, .copy-msg-btn.copied {
+    border-color: #00e676;
+    color: #00e676;
+}
+
+.bot-msg pre {
+    margin: 0 !important;
+    padding: 12px !important;
+    overflow-x: auto;
+    max-width: 100%;
+    font-family: 'Fira Code', Consolas, Monaco, monospace;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: #e2e8f0;
+    background: transparent !important;
+    border: none !important;
+}
+
+.bot-msg pre code {
+    background: none !important;
+    padding: 0 !important;
+    font-family: inherit;
+    white-space: pre;
+    word-break: normal;
+}
+
+.bot-msg code {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-family: monospace;
+    word-break: break-word;
+}
+
 /* Typing Animation */
 .typing-indicator {
     display: flex;

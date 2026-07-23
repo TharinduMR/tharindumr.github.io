@@ -759,6 +759,44 @@ document.addEventListener('DOMContentLoaded', () => {
                     link.innerHTML = '<i class="fa-solid fa-download"></i> ' + link.innerText;
                 });
 
+                // Enhance Code Blocks with Header & Copy Button
+                botMsgDiv.querySelectorAll('pre').forEach(pre => {
+                    const code = pre.querySelector('code');
+                    const codeText = code ? code.innerText : pre.innerText;
+                    
+                    let lang = 'code';
+                    if (code && code.className) {
+                        const match = code.className.match(/language-([a-zA-Z0-9_-]+)/);
+                        if (match) lang = match[1];
+                    }
+
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'code-block-wrapper';
+
+                    const header = document.createElement('div');
+                    header.className = 'code-block-header';
+                    header.innerHTML = `
+                        <span class="code-lang">${lang}</span>
+                        <button class="copy-code-btn" type="button" title="Copy Code"><i class="fa-regular fa-copy"></i> <span>Copy</span></button>
+                    `;
+
+                    const copyBtn = header.querySelector('.copy-code-btn');
+                    copyBtn.addEventListener('click', () => {
+                        navigator.clipboard.writeText(codeText).then(() => {
+                            copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Copied!</span>';
+                            copyBtn.classList.add('copied');
+                            setTimeout(() => {
+                                copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i> <span>Copy</span>';
+                                copyBtn.classList.remove('copied');
+                            }, 2000);
+                        });
+                    });
+
+                    pre.parentNode.insertBefore(wrapper, pre);
+                    wrapper.appendChild(header);
+                    wrapper.appendChild(pre);
+                });
+
                 chatBox.scrollTop = chatBox.scrollHeight;
 
             } catch (error) {
